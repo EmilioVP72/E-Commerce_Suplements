@@ -12,9 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('brand_catalog', function (Blueprint $table) {
-            $table->unsignedInteger('id_brand');
-            $table->unsignedInteger('id_catalog');
-
             $table->foreignId('id_brand')->references('id_brand')->on('brand');
             $table->foreignId('id_catalog')->references('id_catalog')->on('catalog');
             $table->timestamps();
