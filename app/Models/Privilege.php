@@ -6,5 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Privilege extends Model
 {
-    //
+    protected $fillable = [
+        'privilege',
+        'description',
+    ];
+
+    public function roles()
+    {
+        return $this->belongsToMany(Rol::class, 'rol_privilege', 'id_privilege', 'id_rol');
+    }
 }
