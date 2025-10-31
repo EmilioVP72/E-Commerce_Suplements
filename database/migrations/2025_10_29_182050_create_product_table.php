@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('description');
             $table->text('how_to_use');
             $table->text('warning');
-            $table->unsignedInteger('id_brand');
             
             $table->foreignId('id_brand')->references('id_brand')->on('brand');
 
