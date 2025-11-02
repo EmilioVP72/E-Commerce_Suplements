@@ -8,3 +8,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 require __DIR__.'\Supplier\supplier.php';
+require __DIR__.'\Product\product.php';
+require __DIR__.'\Brand\brand.php';
