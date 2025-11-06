@@ -47,4 +47,12 @@ class SupplierController extends Controller
         $supplier = $this->supplierRepository->update($id, $request->validated());
         return $this->utilResponse->succesResponse(new SupplierResource($supplier), 'Proveedor actualizado correctamente');
     }
+
+    public function destroy($id)
+    {
+        if ($this->supplierRepository->delete($id)) {
+            return $this->utilResponse->succesResponse(null, 'Proveedor eliminado correctamente');
+        }
+        return $this->utilResponse->errorResponse('No se pudo eliminar el proveedor o no existe');
+    }
 }

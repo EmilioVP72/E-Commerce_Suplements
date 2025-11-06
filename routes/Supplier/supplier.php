@@ -13,4 +13,5 @@ Route::prefix('suppliers')->group(function () {
     Route::get('/OneSupplier/{id}', [SupplierController::class, 'show']);
     Route::post('/StoreSupplier', [SupplierController::class, 'store']);
     Route::put('/UpdateSupplier/{id}', [SupplierController::class, 'update']);
+    Route::delete('/DeleteSupplier/{id}', [SupplierController::class, 'destroy']);
 });

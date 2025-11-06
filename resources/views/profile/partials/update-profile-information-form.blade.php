@@ -16,7 +16,7 @@
     <!-- FORMULARIO PRINCIPAL: Cambio a 'PUT' y 'enctype' para la foto -->
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
-        @method('patch') 
+        @method('patch')
 
         <!-- CAMPO PARA LA FOTO DE PERFIL -->
         <div class="col-span-6 sm:col-span-4">
@@ -27,11 +27,11 @@
 
             <!-- Input de archivo oculto con referencia Alpine -->
             <input type="file"
-                   id="photo"
-                   name="photo"
-                   class="hidden"
-                   x-ref="photo"
-                   x-on:change="
+                id="photo"
+                name="photo"
+                class="hidden"
+                x-ref="photo"
+                x-on:change="
                        photoName = $refs.photo.files[0].name;
                        const reader = new FileReader();
                        reader.onload = (e) => {
@@ -43,13 +43,23 @@
 
             <!-- Foto de perfil actual -->
             <div class="mt-2" x-show="! photoPreview">
-                <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="rounded-full h-20 w-20 object-cover">
+                @if (Auth::user()->photo)
+                <img src="{{ asset('storage/' . Auth::user()->photo) }}"
+                    alt="{{ Auth::user()->name }}"
+                    class="rounded-full h-20 w-20 object-cover">
+                @else
+                <!-- Imagen por defecto si no tiene foto -->
+                <img src="{{ asset('images/default-user.png') }}"
+                    alt="Foto por defecto"
+                    class="rounded-full h-20 w-20 object-cover">
+                @endif
             </div>
+
 
             <!-- Previsualización de la nueva foto -->
             <div class="mt-2" x-show="photoPreview" style="display: none;">
                 <span class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
-                      x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                    x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                 </span>
             </div>
 
@@ -59,14 +69,14 @@
 
             <!-- Botón opcional para eliminar la foto -->
             @if (Auth::user()->profile_photo_path)
-                <x-secondary-button type="button" class="mt-2" 
-                    x-on:click.prevent="
+            <x-secondary-button type="button" class="mt-2"
+                x-on:click.prevent="
                         isPhotoRemoved = true; 
                         photoPreview = null;
                         $refs.photo.value = null; // Limpiar el input file
                     ">
-                    {{ __('Remove Photo') }}
-                </x-secondary-button>
+                {{ __('Remove Photo') }}
+            </x-secondary-button>
             @endif
 
             <x-input-error for="photo" class="mt-2" :messages="$errors->get('photo')" />
@@ -97,13 +107,12 @@
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
-                >{{ __('Saved.') }}</p>
+            <p
+                x-data="{ show: true }"
+                x-show="show"
+                x-transition
+                x-init="setTimeout(() => show = false, 2000)"
+                class="text-sm text-gray-600 dark:text-gray-400">{{ __('Saved.') }}</p>
             @endif
         </div>
     </form>

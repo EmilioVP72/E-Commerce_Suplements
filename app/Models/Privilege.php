@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Privilege extends Model
 {
+    protected $table = 'privilege';
+    protected $primaryKey = 'id_privilege';
+
     protected $fillable = [
         'privilege',
         'description',
