@@ -17,7 +17,7 @@
                     </x-nav-link>
                     @if(Auth::user()->hasRole('administrar'))
                         <x-nav-link :href="route('administration')" :active="request()->routeIs('administration')">
-                            {{ __('Administration') }}
+                            {{ __('Administración') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -77,7 +77,7 @@
             </x-responsive-nav-link>
             @if(Auth::user()->hasRole('administrar'))
                 <x-responsive-nav-link :href="route('administration')" :active="request()->routeIs('administration')">
-                    {{ __('Administration') }}
+                    {{ __('Administración') }}
                 </x-responsive-nav-link>
             @endif
         </div>

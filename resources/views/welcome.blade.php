@@ -96,6 +96,9 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                             <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Editar Perfil</a></li>
+                            @if(Auth::check() && Auth::user()->hasRole('Administrador'))
+                            <li><a class="dropdown-item" href="{{ route('administration') }}">Administración</a></li>
+                            @endif
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

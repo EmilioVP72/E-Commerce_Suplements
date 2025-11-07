@@ -39,12 +39,12 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Rol::class, 'rol_usuario', 'id_usuario', 'id_rol');
+        return $this->belongsToMany(Rol::class, 'user_rol', 'id_user', 'id_rol');
     }
 
     public function hasRole($roleName)
     {
-        return $this->roles->contains('nombre', $roleName);
+        return $this->roles->contains('rol', $roleName);
     }
 
     public function getProfilePhotoUrl()
