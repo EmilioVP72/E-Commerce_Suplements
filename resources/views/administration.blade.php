@@ -1,37 +1,115 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Administración') }}
-        </h2>
-    </x-slot>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"></div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        {{ __('Bienvenido al panel de administración') }}
-                    </h3>
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        {{ __('Aquí podrás gestionar las diferentes entidades del sistema.') }}
-                    </p>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <a href="{{ route('brands.index') }}" class="block p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
-                            <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ __('Marcas') }}</h4>
-                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('Gestionar marcas de productos.') }}</p>
+    <title>Administración - Suplements</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Figtree', sans-serif;
+        }
+
+        .navbar {
+            background-color: #212529 !important;
+        }
+
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            padding-top: 56px; /* Altura del navbar */
+            background-color: #343a40;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 70px 20px 20px 20px;
+        }
+
+        .sidebar .nav-link {
+            color: #adb5bd;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: #fff;
+            background-color: #495057;
+        }
+
+        .card {
+            border: none;
+            border-radius: .5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="{{ url('/') }}">Suplements</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ Auth::user()->name }}
                         </a>
-                        <a href="{{ route('products.index') }}" class="block p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
-                            <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ __('Productos') }}</h4>
-                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('Gestionar productos y sus detalles.') }}</p>
-                        </a>
-                        <a href="{{ route('suppliers.index') }}" class="block p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
-                            <h4 class="text-lg font-semibold text-xl text-gray-900 dark:text-gray-100">{{ __('Proveedores') }}</h4>
-                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('Gestionar proveedores de productos.') }}</p>
-                        </a>
-                    </div>
-                </div>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Editar Perfil</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); this.closest('form').submit();">
+                                        Cerrar Sesión
+                                    </a>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar p-3">
+        <ul class="nav flex-column">
+            {{-- El helper request()->routeIs() comprueba si la ruta actual coincide con el patrón --}}
+            <li class="nav-item"><a href="{{ route('administration') }}" class="nav-link {{ request()->routeIs('administration') ? 'active' : '' }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+            <li class="nav-item"><a href="{{ route('products.index') }}" class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}"><i class="bi bi-box-seam me-2"></i>Productos</a></li>
+            <li class="nav-item"><a href="{{ route('suppliers.index') }}" class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}"><i class="bi bi-truck me-2"></i>Proveedores</a></li>
+            <li class="nav-item"><a href="{{ route('brands.index') }}" class="nav-link {{ request()->routeIs('brands.*') ? 'active' : '' }}"><i class="bi bi-tags me-2"></i>Marcas</a></li>
+            {{-- Nota: La ruta para 'users.index' no está definida en tu archivo web.php. Deberás crearla. --}}
+            <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-people me-2"></i>Usuarios</a></li>
+        </ul>
     </div>
-</x-app-layout>
+
+    <!-- Main Content -->
+    <main class="main-content container-fluid">
+        <h1 class="mb-4">Panel de Administración</h1>
+        @yield('content')
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

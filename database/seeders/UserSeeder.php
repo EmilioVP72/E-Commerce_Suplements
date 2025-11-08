@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'phone' => '4151805038',
             'email' => 'emiliovpsis@gmail.com',
             'password' => Hash::make('Emilio72@#'),
-            'photo' => 'default.png',
+            'photo' => '../resources/images/icono_sin_imagen.png',
             ]);
     }
 }

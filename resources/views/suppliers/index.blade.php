@@ -1,39 +1,50 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Suppliers') }}
-        </h2>
-    </x-slot>
+@extends('administration')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="container">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($suppliers as $supplier)
-                                    <tr>
-                                        <th scope="row">{{ $supplier->id_supplier }}</th>
-                                        <td>{{ $supplier->name }}</td>
-                                        <td>
-                                            <a href="#" class="btn btn-warning">Edit</a>
-                                            <a href="#" class="btn btn-danger">Delete</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+@section('content')
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="m-0">Gestión de Proveedores</h1>
+        <a href="{{ route('suppliers.create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i>Crear Proveedor
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Proveedor</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Email</th>
+                            <th scope="col" class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($suppliers as $supplier)
+                            <tr>
+                                <th scope="row">{{ $supplier->id_supplier }}</th>
+                                <td>{{ $supplier->name }}</td>
+                                <td>{{ $supplier->phone ?? 'No disponible' }}</td>
+                                <td>{{ $supplier->email ?? 'No disponible' }}</td>
+                                <td class="text-end">
+                                    <a href="{{ route('suppliers.edit', $supplier->id_supplier) }}" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil-square me-1"></i>Editar
+                                    </a>
+                                    <form action="{{ route('suppliers.destroy', $supplier->id_supplier) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este proveedor?')"><i class="bi bi-trash3 me-1"></i>Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection
