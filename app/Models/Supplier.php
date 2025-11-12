@@ -14,4 +14,8 @@ class Supplier extends Model
         'phone',
         'email',
     ];
+
+    public function brand(){
+        return $this->hasMany(Brand::class, 'id_supplier', 'id_supplier');
+    }
 }

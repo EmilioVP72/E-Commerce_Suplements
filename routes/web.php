@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Product\ProductPageController;
+use App\Http\Controllers\Brand\BrandPageController;
+use App\Http\Controllers\Supplier\SupplierPageController;
 
 Route::get('/', function () {
     $products = Product::latest()->take(6)->get();
@@ -25,14 +28,11 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-use App\Http\Controllers\Brand\BrandPageController;
-
+// CRUDS, PDFS Y REPORTES
 Route::resource('brands', BrandPageController::class)->middleware(['auth', 'verified']);
-
-use App\Http\Controllers\Product\ProductPageController;
-
+// PRODUCTS
+Route::get('products/print', [ProductPageController::class, 'print'])->name('products.print')->middleware(['auth', 'verified']);
+Route::get('products/stats', [ProductPageController::class, 'stats'])->name('products.stats')->middleware(['auth', 'verified']);
+Route::get('products/export', [ProductPageController::class, 'exportExcel'])->name('products.export')->middleware(['auth', 'verified']);
 Route::resource('products', ProductPageController::class)->middleware(['auth', 'verified']);
-
-use App\Http\Controllers\Supplier\SupplierPageController;
-
 Route::resource('suppliers', SupplierPageController::class)->middleware(['auth', 'verified']);

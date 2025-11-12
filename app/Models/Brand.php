@@ -13,4 +13,20 @@ class Brand extends Model
         'brand',
         'description'
     ];
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'id_supplier', 'id_supplier');
+    }
+
+    public function catalog()
+    {
+        return $this->belongsTo(Catalog::class, 'id_catalog', 'id_catalog');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'id_brand', 'id_brand');
+    }
+
 }

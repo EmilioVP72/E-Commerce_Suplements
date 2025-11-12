@@ -102,7 +102,6 @@
 
     <!-- Main Content -->
     <main class="main-content container-fluid">
-        <h1 class="mb-4">Panel de Administración</h1>
         @yield('content')
     </main>
 
