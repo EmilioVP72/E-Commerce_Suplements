@@ -35,4 +35,10 @@ class ProductRepository
         $product?->update($data);
         return $product;
     }
+
+    public function delete($id)
+    {
+        $product = $this->find($id);
+        return $product?->delete();
+    }
 }

@@ -7,13 +7,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
 {
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
         return [
             'id_product' => $this->id_product,
-            'product' => $this->product,
-            'photo' => $this->photo,
+            'name' => $this->product,
             'sale_price' => $this->sale_price,
+            'photo' => $this->photo,
             'purchase_price' => $this->purchase_price,
             'description' => $this->description,
             'how_to_use' => $this->how_to_use,

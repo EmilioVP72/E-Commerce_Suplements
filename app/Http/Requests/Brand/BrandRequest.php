@@ -19,11 +19,13 @@ class BrandRequest extends FormRequest
             case 'POST':
                 return [
                     'brand' => 'required|string|max:255|unique:brand,brand',
+                    'name' => 'required|string|max:255|unique:brands,name',
                 ];
 
             case 'PUT':
                 return [
                     'brand' => 'sometimes|required|string|max:255|unique:brand,brand,' . $brandId . ',id_brand',
+                    'name' => 'sometimes|required|string|max:255|unique:brands,name,' . $brandId . ',id_brand',
                 ];
 
             default:
@@ -38,6 +40,8 @@ class BrandRequest extends FormRequest
             'brand.string' => 'El nombre de la marca debe ser una cadena de texto.',
             'brand.max' => 'El nombre de la marca no debe superar los 255 caracteres.',
             'brand.unique' => 'El nombre de la marca ya está registrado.',
+            'name.required' => 'El nombre de la marca es obligatorio.',
+            'name.unique' => 'El nombre de la marca ya está en uso.',
         ];
     }
 }

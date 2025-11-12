@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class BrandResource extends JsonResource
 {
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
         return [
             'id_brand' => $this->id_brand,
@@ -15,6 +15,8 @@ class BrandResource extends JsonResource
             'id_supplier' => $this->id_supplier,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'id' => $this->id_brand,
+            'name' => $this->name,
         ];
     }
 }

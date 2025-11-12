@@ -10,7 +10,8 @@ use App\Http\Controllers\Product\ProductController;
 |*/
 Route::prefix('products')->group(function () {
     Route::get('/all', [ProductController::class, 'index']);
-    Route::get('/OneSupplier/{id}', [SupplierController::class, 'show']);
-    Route::post('/StoreSupplier', [SupplierController::class, 'store']);
-    Route::put('/UpdateSupplier/{id}', [SupplierController::class, 'update']);
+    Route::get('/OneProduct/{id}', [ProductController::class, 'show']);
+    Route::post('/StoreProduct', [ProductController::class, 'store']);
+    Route::put('/UpdateProduct/{id}', [ProductController::class, 'update']);
+    Route::delete('/DeleteProduct/{id}', [ProductController::class, 'destroy']);
 });
