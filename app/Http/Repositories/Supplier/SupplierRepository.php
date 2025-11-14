@@ -35,4 +35,10 @@ class SupplierRepository
         $supplier?->update($data);
         return $supplier;
     }
+
+    public function delete($id)
+    {
+        $supplier = $this->find($id);
+        return $supplier?->delete();
+    }
 }
