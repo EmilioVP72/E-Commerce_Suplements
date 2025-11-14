@@ -35,6 +35,8 @@
         .main-content {
             margin-left: 250px;
             padding: 70px 20px 20px 20px;
+            max-width: calc(100vw - 250px);
+            overflow-x: hidden;
         }
 
         .sidebar .nav-link {
@@ -95,6 +97,8 @@
             <li class="nav-item"><a href="{{ route('products.index') }}" class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}"><i class="bi bi-box-seam me-2"></i>Productos</a></li>
             <li class="nav-item"><a href="{{ route('suppliers.index') }}" class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}"><i class="bi bi-truck me-2"></i>Proveedores</a></li>
             <li class="nav-item"><a href="{{ route('brands.index') }}" class="nav-link {{ request()->routeIs('brands.*') ? 'active' : '' }}"><i class="bi bi-tags me-2"></i>Marcas</a></li>
+            <li class="nav-item"><a href="{{ route('catalogs.index') }}" class="nav-link {{ request()->routeIs('catalogs.*') ? 'active' : '' }}"><i class="bi bi-tags me-2"></i>Catálogos</a></li>
+            
             {{-- Nota: La ruta para 'users.index' no está definida en tu archivo web.php. Deberás crearla. --}}
             <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-people me-2"></i>Usuarios</a></li>
         </ul>

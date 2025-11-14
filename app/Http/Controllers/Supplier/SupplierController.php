@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Supplier;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Supplier\SupplierRequest;
 use App\Http\Resources\Supplier\SupplierResource;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Repositories\Supplier\SupplierRepository;
 use App\Traits\UtilResponse;
 
@@ -35,7 +36,17 @@ class SupplierController extends Controller
 
     public function store(SupplierRequest $request)
     {
-        $supplier = $this->supplierRepository->create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('suppliers', 'public');
+            $photoContent = file_get_contents($request->file('photo')->getRealPath());
+            $data['photo_base_64'] = base64_encode($photoContent);
+            $data['photo'] = $path;
+        }
+
+        $supplier = $this->supplierRepository->create($data);
+
         if ($supplier) {
             return $this->utilResponse->succesResponse(new SupplierResource($supplier), 'Proveedor creado correctamente', 201);
         }
@@ -44,7 +55,20 @@ class SupplierController extends Controller
 
     public function update(SupplierRequest $request, $id)
     {
-        $supplier = $this->supplierRepository->update($id, $request->validated());
+        $data = $request->validated();
+        $supplier = $this->supplierRepository->find($id);
+
+        if ($request->hasFile('photo')) {
+            if ($supplier->photo) {
+                Storage::disk('public')->delete($supplier->photo);
+            }
+            $path = $request->file('photo')->store('suppliers', 'public');
+            $photoContent = file_get_contents($request->file('photo')->getRealPath());
+            $data['photo_base_64'] = base64_encode($photoContent);
+            $data['photo'] = $path;
+        }
+
+        $supplier = $this->supplierRepository->update($id, $data);
         return $this->utilResponse->succesResponse(new SupplierResource($supplier), 'Proveedor actualizado correctamente');
     }
 

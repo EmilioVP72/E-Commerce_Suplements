@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Product\ProductPageController;
 use App\Http\Controllers\Brand\BrandPageController;
 use App\Http\Controllers\Supplier\SupplierPageController;
+use App\Http\Controllers\Catalog\CatalogPageController;
 
 Route::get('/', function () {
     $products = Product::latest()->take(6)->get();
@@ -36,3 +37,5 @@ Route::get('products/stats', [ProductPageController::class, 'stats'])->name('pro
 Route::get('products/export', [ProductPageController::class, 'exportExcel'])->name('products.export')->middleware(['auth', 'verified']);
 Route::resource('products', ProductPageController::class)->middleware(['auth', 'verified']);
 Route::resource('suppliers', SupplierPageController::class)->middleware(['auth', 'verified']);
+Route::resource('catalogs', CatalogPageController::class)->middleware(['auth', 'verified']);
+

@@ -8,8 +8,11 @@ class Supplier extends Model
 {
     protected $table = 'supplier';
     protected $primaryKey = 'id_supplier';
+    public $timestamps = true;
     
     protected $fillable = [
+        'photo',
+        'photo_base_64',
         'name',
         'phone',
         'email',

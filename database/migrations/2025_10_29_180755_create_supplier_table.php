@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('supplier', function (Blueprint $table) {
             $table->increments('id_supplier');
+            $table->string('photo')->nullable();
+            $table->longText('photo_base_64')->nullable();
             $table->string('name');
             $table->string('phone')->unique();
             $table->string('email')->unique();

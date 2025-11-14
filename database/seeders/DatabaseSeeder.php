@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             RolSeeder::class,
             PrivilegeSeeder::class,
             RolPrivilegeSeeder::class,
-            UserRolSeeder::class
+            UserRolSeeder::class,
+            CatalogSeeder::class,
         ]);
     }
 }
