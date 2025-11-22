@@ -32,17 +32,12 @@
                                 <td>{{ $item->min_quantity }}</td>
                                 
                                 <td class="text-end">
-                                    <a href="{{ route('inventory.edit', $item->id_inventory) }}" class="btn btn-warning btn-sm">
+                                    <a href="{{ route('inventories.edit', $item->id_inventory) }}" class="btn btn-warning btn-sm">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
-                                    
-                                    <form action="{{ route('inventory.destroy', $item->id_inventory) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este registro de inventario?')">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteInventory({{ $item->id_inventory }})">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -52,4 +47,31 @@
         </div>
     </div>
 </div>
+
+<script>
+async function deleteInventory(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar este registro de inventario?')) {
+        return;
+    }
+
+    const url = `{{ url('/api/inventories/DeleteInventory') }}/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Acción completada.');
+        location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudo eliminar el registro de inventario.');
+    }
+}
+</script>
 @endsection

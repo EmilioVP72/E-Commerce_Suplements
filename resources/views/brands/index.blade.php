@@ -31,11 +31,7 @@
                                     <a href="{{ route('brands.edit', $brand->id_brand) }}" class="btn btn-warning btn-sm">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
-                                    <form action="{{ route('brands.destroy', $brand->id_brand) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta marca?')"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteBrand({{ $brand->id_brand }})"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -45,4 +41,31 @@
         </div>
     </div>
 </div>
+
+<script>
+async function deleteBrand(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta marca?')) {
+        return;
+    }
+
+    const url = `{{ url('/api/brands/DeleteBrand') }}/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Acción completada.');
+        location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudo eliminar la marca.');
+    }
+}
+</script>
 @endsection

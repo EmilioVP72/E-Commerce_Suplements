@@ -38,11 +38,7 @@
                                     <a href="{{ route('purchases.edit', $purchase->id_purchase) }}" class="btn btn-warning btn-sm">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
-                                    <form action="{{ route('purchases.destroy', $purchase->id_purchase) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta compra?')"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deletePurchase({{ $purchase->id_purchase }})"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -52,4 +48,31 @@
         </div>
     </div>
 </div>
+
+<script>
+async function deletePurchase(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta compra?')) {
+        return;
+    }
+
+    const url = `{{ url('/api/purchases/DeletePurchase') }}/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Acción completada.');
+        location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudo eliminar la compra.');
+    }
+}
+</script>
 @endsection

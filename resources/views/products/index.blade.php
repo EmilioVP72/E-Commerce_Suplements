@@ -63,13 +63,9 @@
                                         <a href="{{ route('products.edit', $product->id_product) }}" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
-                                        <form action="{{ route('products.destroy', $product->id_product) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este producto?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteProduct({{ $product->id_product }})">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -80,4 +76,31 @@
         </div>
     </div>
 </div>
+
+<script>
+async function deleteProduct(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        return;
+    }
+
+    const url = `{{ url('/api/products/DeleteProduct') }}/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Acción completada.');
+        location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudo eliminar el producto.');
+    }
+}
+</script>
 @endsection

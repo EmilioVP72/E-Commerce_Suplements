@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Residence_User extends Model
 {
+    protected $table = 'residence_user';
+    protected $primaryKey = 'id_residence_user';
     protected $fillable = [
         'id_user',
         'id_residence',

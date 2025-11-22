@@ -42,11 +42,7 @@
                                     <a href="{{ route('residences.edit', $residence->id_residence) }}" class="btn btn-warning btn-sm">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
-                                    <form action="{{ route('residences.destroy', $residence->id_residence) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta residencia?')"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteResidence({{ $residence->id_residence }})"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -56,4 +52,31 @@
         </div>
     </div>
 </div>
+
+<script>
+async function deleteResidence(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta residencia?')) {
+        return;
+    }
+
+    const url = `{{ url('/api/residences/DeleteResidence') }}/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Acción completada.');
+        location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudo eliminar la residencia.');
+    }
+}
+</script>
 @endsection

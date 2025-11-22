@@ -50,13 +50,9 @@ Route::resource('catalogs', CatalogPageController::class)->middleware(['auth', '
 Route::resource('inventories', InventoryPageController::class)->middleware(['auth', 'verified']);
 Route::resource('brand_catalogs', BrandCatalogPageController::class)->middleware(['auth', 'verified']);
 Route::resource('payment_methods', PaymentMethodPageController::class)->middleware(['auth', 'verified']);
-
-// NUEVAS RUTAS - COMPRAS Y TRANSACCIONES
 Route::resource('purchases', PurchasePageController::class)->middleware(['auth', 'verified']);
 Route::resource('purchase_details', PurchaseDetailPageController::class)->middleware(['auth', 'verified']);
 Route::resource('transactions', TransactionPageController::class)->middleware(['auth', 'verified']);
 Route::resource('transaction_details', TransactionDetailPageController::class)->middleware(['auth', 'verified']);
-
-// NUEVAS RUTAS - RESIDENCIAS
 Route::resource('residences', ResidencePageController::class)->middleware(['auth', 'verified']);
 Route::resource('residence_users', ResidenceUserPageController::class)->middleware(['auth', 'verified']);

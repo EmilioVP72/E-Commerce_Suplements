@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Supplier;
 
 use App\Http\Controllers\Controller;
 use App\Models\Supplier;
-use Illuminate\Http\Request;
 
 class SupplierPageController extends Controller
 {
@@ -18,7 +17,7 @@ class SupplierPageController extends Controller
         return view('suppliers.create_form');
     }
 
-    public function edit($id){
-        return view('suppliers.update_form', compact('id'));
+    public function edit(Supplier $supplier){
+        return view('suppliers.update_form', ['id' => $supplier->id_supplier]);
     }
 }

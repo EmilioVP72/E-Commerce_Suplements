@@ -36,11 +36,7 @@
                                     <a href="{{ route('payment_methods.edit', $paymentMethod->id_payment_method) }}" class="btn btn-warning btn-sm">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
-                                    <form action="{{ route('payment_methods.destroy', $paymentMethod->id_payment_method) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este método de pago?')"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deletePaymentMethod({{ $paymentMethod->id_payment_method }})"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -50,4 +46,31 @@
         </div>
     </div>
 </div>
+
+<script>
+async function deletePaymentMethod(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar este método de pago??')) {
+        return;
+    }
+
+    const url = `{{ url('/api/paymentmethods/DeletePaymentMethod') }}/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Acción completada.');
+        location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudo eliminar el método de pago.');
+    }
+}
+</script>
 @endsection

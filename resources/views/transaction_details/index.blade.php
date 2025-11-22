@@ -39,14 +39,10 @@
                                 <td>{{ $detail->quantity }}</td>
                                 <td>${{ number_format($detail->price, 2) }}</td>
                                 <td class="text-end">
-                                    <a href="{{ route('transaction_details.edit', $detail->id) }}" class="btn btn-warning btn-sm">
+                                    <a href="{{ route('transaction_details.edit', $detail->id_transaction_detail) }}" class="btn btn-warning btn-sm">
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
-                                    <form action="{{ route('transaction_details.destroy', $detail->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este detalle?')"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteTransactionDetail({{ $detail->id_transaction_detail }})"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -56,4 +52,31 @@
         </div>
     </div>
 </div>
+
+<script>
+async function deleteTransactionDetail(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar este detalle?')) {
+        return;
+    }
+
+    const url = `{{ url('/api/transactiondetails/DeleteTransactionDetail') }}/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Acción completada.');
+        location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudo eliminar el detalle.');
+    }
+}
+</script>
 @endsection

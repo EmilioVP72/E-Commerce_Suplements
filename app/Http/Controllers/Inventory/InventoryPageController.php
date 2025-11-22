@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Models\Inventory;
-use Illuminate\Http\Request;
 
 class InventoryPageController extends Controller
 {
@@ -12,5 +11,15 @@ class InventoryPageController extends Controller
     {
         $inventories = Inventory::with(['product', 'supplier'])->get();
         return view('inventory.index', compact('inventories'));
+    }
+
+    public function create()
+    {
+        return view('inventory.create_form');
+    }
+
+    public function edit(Inventory $inventory)
+    {
+        return view('inventory.update_form', ['id' => $inventory->id_inventory]);
     }
 }

@@ -25,6 +25,16 @@ class ProductPageController extends Controller
         return view('products.index', compact('products'));
     }
 
+    public function create()
+    {
+        return view('products.create_form');
+    }
+
+    public function edit(Product $product)
+    {
+        return view('products.update_form', ['id' => $product->id_product]);
+    }
+
     public function print()
     {
         $products = Product::with(['brand.supplier'])->get();

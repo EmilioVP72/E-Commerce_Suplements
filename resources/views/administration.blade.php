@@ -49,6 +49,13 @@
             background-color: #495057;
         }
 
+        .sidebar .nav-item .text-muted {
+            color: #90b8ff !important; 
+            font-weight: 600; 
+            letter-spacing: 0.5px; 
+            opacity: 0.8; 
+        }
+
         .card {
             border: none;
             border-radius: .5rem;
@@ -98,6 +105,10 @@
         <ul class="nav flex-column">
             {{-- El helper request()->routeIs() comprueba si la ruta actual coincide con el patrón --}}
             <li class="nav-item"><a href="{{ route('administration') }}" class="nav-link {{ request()->routeIs('administration') ? 'active' : '' }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+
+            {{-- Nota: La ruta para 'users.index' no está definida en tu archivo web.php. Deberás crearla. --}}
+            <li class="nav-item mt-3"><span class="nav-link text-muted" style="cursor: default;"><small>USUARIOS</small></span></li>
+            <li class="nav-item mt-3"><a href="#" class="nav-link"><i class="bi bi-people me-2"></i>Usuarios</a></li>
             
             <!-- Sección: Gestión de Productos -->
             <li class="nav-item mt-3"><span class="nav-link text-muted" style="cursor: default;"><small>GESTIÓN DE PRODUCTOS</small></span></li>
@@ -120,9 +131,6 @@
             <li class="nav-item"><a href="{{ route('payment_methods.index') }}" class="nav-link {{ request()->routeIs('payment_methods.*') ? 'active' : '' }}"><i class="bi bi-credit-card me-2"></i>Métodos de Pago</a></li>
             <li class="nav-item"><a href="{{ route('residences.index') }}" class="nav-link {{ request()->routeIs('residences.*') ? 'active' : '' }}"><i class="bi bi-house me-2"></i>Residencias</a></li>
             <li class="nav-item"><a href="{{ route('residence_users.index') }}" class="nav-link {{ request()->routeIs('residence_users.*') ? 'active' : '' }}"><i class="bi bi-person-workspace me-2"></i>Usuarios-Residencias</a></li>
-
-            {{-- Nota: La ruta para 'users.index' no está definida en tu archivo web.php. Deberás crearla. --}}
-            <li class="nav-item mt-3"><a href="#" class="nav-link"><i class="bi bi-people me-2"></i>Usuarios</a></li>
         </ul>
     </div>
 
