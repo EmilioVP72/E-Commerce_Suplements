@@ -37,4 +37,14 @@ class Product extends Model
             'id_supplier'  
         );
     }
+
+    public function transactionDetails()
+    {
+        return $this->hasMany(Transaction_Detail::class, 'id_product');
+    }
+
+    public function purchaseDetails()
+    {
+        return $this->hasMany(Purchase_Detail::class, 'id_product');
+    }
 }

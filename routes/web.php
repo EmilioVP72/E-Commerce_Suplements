@@ -6,6 +6,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Product\ProductPageController;
 use App\Http\Controllers\Brand\BrandPageController;
 use App\Http\Controllers\Supplier\SupplierPageController;
+use App\Http\Controllers\Catalog\CatalogPageController;
+use App\Http\Controllers\Inventory\InventoryPageController;
+use App\Http\Controllers\BrandCatalog\BrandCatalogPageController;
+use App\Http\Controllers\PaymentMethod\PaymentMethodPageController;
+use App\Http\Controllers\Purchase\PurchasePageController;
+use App\Http\Controllers\PurchaseDetail\PurchaseDetailPageController;
+use App\Http\Controllers\Residence\ResidencePageController;
+use App\Http\Controllers\ResidenceUser\ResidenceUserPageController;
+use App\Http\Controllers\Transaction\TransactionPageController;
+use App\Http\Controllers\TransactionDetail\TransactionDetailPageController;
 
 Route::get('/', function () {
     $products = Product::latest()->take(6)->get();
@@ -36,3 +46,13 @@ Route::get('products/stats', [ProductPageController::class, 'stats'])->name('pro
 Route::get('products/export', [ProductPageController::class, 'exportExcel'])->name('products.export')->middleware(['auth', 'verified']);
 Route::resource('products', ProductPageController::class)->middleware(['auth', 'verified']);
 Route::resource('suppliers', SupplierPageController::class)->middleware(['auth', 'verified']);
+Route::resource('catalogs', CatalogPageController::class)->middleware(['auth', 'verified']);
+Route::resource('inventories', InventoryPageController::class)->middleware(['auth', 'verified']);
+Route::resource('brand_catalogs', BrandCatalogPageController::class)->middleware(['auth', 'verified']);
+Route::resource('payment_methods', PaymentMethodPageController::class)->middleware(['auth', 'verified']);
+Route::resource('purchases', PurchasePageController::class)->middleware(['auth', 'verified']);
+Route::resource('purchase_details', PurchaseDetailPageController::class)->middleware(['auth', 'verified']);
+Route::resource('transactions', TransactionPageController::class)->middleware(['auth', 'verified']);
+Route::resource('transaction_details', TransactionDetailPageController::class)->middleware(['auth', 'verified']);
+Route::resource('residences', ResidencePageController::class)->middleware(['auth', 'verified']);
+Route::resource('residence_users', ResidenceUserPageController::class)->middleware(['auth', 'verified']);

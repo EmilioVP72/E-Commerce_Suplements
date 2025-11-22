@@ -8,10 +8,10 @@ use App\Http\Controllers\Supplier\SupplierController;
 | API Routes Supplier
 |--------------------------------------------------------------------------
 |*/
-Route::prefix('suppliers')->group(function () {
-    Route::get('/all', [SupplierController::class, 'index']);
-    Route::get('/OneSupplier/{id}', [SupplierController::class, 'show']);
-    Route::post('/StoreSupplier', [SupplierController::class, 'store']);
-    Route::put('/UpdateSupplier/{id}', [SupplierController::class, 'update']);
-    Route::delete('/DeleteSupplier/{id}', [SupplierController::class, 'destroy']);
-});
+
+Route::get('/all', [SupplierController::class, 'index'])->middleware(['auth', 'verified']);
+Route::get('/OneSupplier/{id}', [SupplierController::class, 'show']);
+Route::post('/StoreSupplier', [SupplierController::class, 'store']);
+Route::put('/UpdateSupplier/{id}', [SupplierController::class, 'update']);
+Route::delete('/DeleteSupplier/{id}', [SupplierController::class,'destroy']);
+

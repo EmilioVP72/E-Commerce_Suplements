@@ -1,7 +1,7 @@
 @extends('administration')
 
 @section('content')
-<div class="container-fluid" style="margin-left: 250px; width: calc(100% - 250px);">
+<div>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="m-0">Gestión de Productos</h1>
         <div class="d-flex gap-2">
@@ -59,17 +59,13 @@
                                 <td>{{ Str::limit($product->warning, 40, '...') }}</td>
                                 <td>{{ $product->brand->brand ?? 'N/A' }}</td>
                                 <td class="text-center">
-                                    <div class="d-flex flex-column gap-2">
-                                        <a href="{{ route('products.edit', $product->id_product) }}" class="btn btn-warning btn-sm">
-                                            <i class="bi bi-pencil-square me-1"></i>Editar
+                                    <div class="d-flex flex-row justify-content-center gap-2">
+                                        <a href="{{ route('products.edit', $product->id_product) }}" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-pencil-fill"></i>
                                         </a>
-                                        <form action="{{ route('products.destroy', $product->id_product) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este producto?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="bi bi-trash3 me-1"></i>Eliminar
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteProduct({{ $product->id_product }})">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -80,4 +76,31 @@
         </div>
     </div>
 </div>
+
+<script>
+async function deleteProduct(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        return;
+    }
+
+    const url = `{{ url('/api/products/DeleteProduct') }}/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Acción completada.');
+        location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudo eliminar el producto.');
+    }
+}
+</script>
 @endsection

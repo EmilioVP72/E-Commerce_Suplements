@@ -35,6 +35,8 @@
         .main-content {
             margin-left: 250px;
             padding: 70px 20px 20px 20px;
+            max-width: calc(100vw - 250px);
+            overflow-x: hidden;
         }
 
         .sidebar .nav-link {
@@ -45,6 +47,13 @@
         .sidebar .nav-link.active {
             color: #fff;
             background-color: #495057;
+        }
+
+        .sidebar .nav-item .text-muted {
+            color: #90b8ff !important; 
+            font-weight: 600; 
+            letter-spacing: 0.5px; 
+            opacity: 0.8; 
         }
 
         .card {
@@ -64,7 +73,11 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ Auth::user()->name }}
+                            @auth
+                                {{ Auth::user()->name }}
+                            @else
+                                Invitado
+                            @endauth
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Editar Perfil</a></li>
@@ -92,11 +105,32 @@
         <ul class="nav flex-column">
             {{-- El helper request()->routeIs() comprueba si la ruta actual coincide con el patrón --}}
             <li class="nav-item"><a href="{{ route('administration') }}" class="nav-link {{ request()->routeIs('administration') ? 'active' : '' }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+
+            {{-- Nota: La ruta para 'users.index' no está definida en tu archivo web.php. Deberás crearla. --}}
+            <li class="nav-item mt-3"><span class="nav-link text-muted" style="cursor: default;"><small>USUARIOS</small></span></li>
+            <li class="nav-item mt-3"><a href="#" class="nav-link"><i class="bi bi-people me-2"></i>Usuarios</a></li>
+            
+            <!-- Sección: Gestión de Productos -->
+            <li class="nav-item mt-3"><span class="nav-link text-muted" style="cursor: default;"><small>GESTIÓN DE PRODUCTOS</small></span></li>
             <li class="nav-item"><a href="{{ route('products.index') }}" class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}"><i class="bi bi-box-seam me-2"></i>Productos</a></li>
             <li class="nav-item"><a href="{{ route('suppliers.index') }}" class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}"><i class="bi bi-truck me-2"></i>Proveedores</a></li>
             <li class="nav-item"><a href="{{ route('brands.index') }}" class="nav-link {{ request()->routeIs('brands.*') ? 'active' : '' }}"><i class="bi bi-tags me-2"></i>Marcas</a></li>
-            {{-- Nota: La ruta para 'users.index' no está definida en tu archivo web.php. Deberás crearla. --}}
-            <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-people me-2"></i>Usuarios</a></li>
+            <li class="nav-item"><a href="{{ route('catalogs.index') }}" class="nav-link {{ request()->routeIs('catalogs.*') ? 'active' : '' }}"><i class="bi bi-bookmark me-2"></i>Catálogos</a></li>
+            <li class="nav-item"><a href="{{ route('brand_catalogs.index') }}" class="nav-link {{ request()->routeIs('brand_catalogs.*') ? 'active' : '' }}"><i class="bi bi-link-45deg me-2"></i>Asociar Marcas</a></li>
+            <li class="nav-item"><a href="{{ route('inventories.index') }}" class="nav-link {{ request()->routeIs('inventories.*') ? 'active' : '' }}"><i class="bi bi-inbox me-2"></i>Inventarios</a></li>
+
+            <!-- Sección: Ventas y Transacciones -->
+            <li class="nav-item mt-3"><span class="nav-link text-muted" style="cursor: default;"><small>VENTAS Y TRANSACCIONES</small></span></li>
+            <li class="nav-item"><a href="{{ route('purchases.index') }}" class="nav-link {{ request()->routeIs('purchases.*') ? 'active' : '' }}"><i class="bi bi-cart-check me-2"></i>Compras</a></li>
+            <li class="nav-item"><a href="{{ route('purchase_details.index') }}" class="nav-link {{ request()->routeIs('purchase_details.*') ? 'active' : '' }}"><i class="bi bi-receipt me-2"></i>Detalles de Compras</a></li>
+            <li class="nav-item"><a href="{{ route('transactions.index') }}" class="nav-link {{ request()->routeIs('transactions.*') ? 'active' : '' }}"><i class="bi bi-arrow-left-right me-2"></i>Transacciones</a></li>
+            <li class="nav-item"><a href="{{ route('transaction_details.index') }}" class="nav-link {{ request()->routeIs('transaction_details.*') ? 'active' : '' }}"><i class="bi bi-file-text me-2"></i>Detalles de Transacciones</a></li>
+
+            <!-- Sección: Métodos de Pago y Ubicaciones -->
+            <li class="nav-item mt-3"><span class="nav-link text-muted" style="cursor: default;"><small>MÉTODOS Y UBICACIONES</small></span></li>
+            <li class="nav-item"><a href="{{ route('payment_methods.index') }}" class="nav-link {{ request()->routeIs('payment_methods.*') ? 'active' : '' }}"><i class="bi bi-credit-card me-2"></i>Métodos de Pago</a></li>
+            <li class="nav-item"><a href="{{ route('residences.index') }}" class="nav-link {{ request()->routeIs('residences.*') ? 'active' : '' }}"><i class="bi bi-house me-2"></i>Residencias</a></li>
+            <li class="nav-item"><a href="{{ route('residence_users.index') }}" class="nav-link {{ request()->routeIs('residence_users.*') ? 'active' : '' }}"><i class="bi bi-person-workspace me-2"></i>Usuarios-Residencias</a></li>
         </ul>
     </div>
 
