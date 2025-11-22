@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\Catalog; // Importamos el modelo Catalog
+use App\Models\Catalog; 
 use Illuminate\Http\Request;
 
 class CatalogPageController extends Controller

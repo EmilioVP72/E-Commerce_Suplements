@@ -58,6 +58,10 @@ class SupplierController extends Controller
         $data = $request->validated();
         $supplier = $this->supplierRepository->find($id);
 
+        if (!$supplier) {
+            return $this->utilResponse->errorResponse('No existe el proveedor', 404);
+        }
+
         if ($request->hasFile('photo')) {
             if ($supplier->photo) {
                 Storage::disk('public')->delete($supplier->photo);

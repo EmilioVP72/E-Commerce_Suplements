@@ -66,7 +66,11 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ Auth::user()->name }}
+                            @auth
+                                {{ Auth::user()->name }}
+                            @else
+                                Invitado
+                            @endauth
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Editar Perfil</a></li>
@@ -98,7 +102,9 @@
             <li class="nav-item"><a href="{{ route('suppliers.index') }}" class="nav-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}"><i class="bi bi-truck me-2"></i>Proveedores</a></li>
             <li class="nav-item"><a href="{{ route('brands.index') }}" class="nav-link {{ request()->routeIs('brands.*') ? 'active' : '' }}"><i class="bi bi-tags me-2"></i>Marcas</a></li>
             <li class="nav-item"><a href="{{ route('catalogs.index') }}" class="nav-link {{ request()->routeIs('catalogs.*') ? 'active' : '' }}"><i class="bi bi-tags me-2"></i>Catálogos</a></li>
-            
+            <li class="nav-item"><a href="{{ route('brand_catalogs.index') }}" class="nav-link {{ request()->routeIs('brand_catalogs.*') ? 'active' : '' }}"><i class="bi bi-link-45deg me-2"></i>Asociar Marcas</a></li>
+            <li class="nav-item"><a href="{{ route('inventories.index') }}" class="nav-link {{ request()->routeIs('inventories.*') ? 'active' : '' }}"><i class="bi bi-tags me-2"></i>Inventarios</a></li>
+            <li class="nav-item"><a href="{{ route('payment_methods.index') }}" class="nav-link {{ request()->routeIs('payment_methods.*') ? 'active' : '' }}"><i class="bi bi-credit-card me-2"></i>Métodos de Pago</a></li>
             {{-- Nota: La ruta para 'users.index' no está definida en tu archivo web.php. Deberás crearla. --}}
             <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-people me-2"></i>Usuarios</a></li>
         </ul>

@@ -13,4 +13,12 @@ class SupplierPageController extends Controller
         $suppliers = Supplier::all();
         return view('suppliers.index', compact('suppliers'));
     }
+
+    public function create(){
+        return view('suppliers.create_form');
+    }
+
+    public function edit($id){
+        return view('suppliers.update_form', compact('id'));
+    }
 }

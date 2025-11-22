@@ -4,7 +4,7 @@
 <div>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="m-0">Gestión de Proveedores</h1>
-        <a href="{{ route('suppliers.create') }}" class="btn btn-primary">
+        <a href="{{ route('suppliers.create') }}" class="btn btn-primary"> 
             <i class="bi bi-plus-circle me-2"></i>Crear Proveedor
         </a>
     </div>
@@ -41,14 +41,10 @@
                                 <td>{{ $supplier->phone ?? 'No disponible' }}</td>
                                 <td>{{ $supplier->email ?? 'No disponible' }}</td>
                                 <td class="text-end">
-                                    <a href="{{ route('suppliers.edit', $supplier->id_supplier) }}" class="btn btn-warning btn-sm">
+                                    <a href="{{ route('suppliers.edit', $supplier->id_supplier) }}" class="btn btn-warning btn-sm"> <!-- Updated route -->
                                         <i class="bi bi-pencil-fill"></i>
                                     </a>
-                                    <form action="{{ route('suppliers.destroy', $supplier->id_supplier) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar este proveedor?')"><i class="bi bi-trash-fill"></i></button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteSupplier( {{ $supplier->id_supplier }} )"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -58,4 +54,31 @@
         </div>
     </div>
 </div>
+
+<script>
+async function deleteSupplier(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar este proveedor?')) {
+        return;
+    }
+
+    const url = `{{ url('/api/suppliers/DeleteSupplier') }}/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        alert(result.message || 'Acción completada.');
+        location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('No se pudo eliminar el proveedor.');
+    }
+}
+</script>
 @endsection

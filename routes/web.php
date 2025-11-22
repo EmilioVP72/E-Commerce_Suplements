@@ -7,6 +7,9 @@ use App\Http\Controllers\Product\ProductPageController;
 use App\Http\Controllers\Brand\BrandPageController;
 use App\Http\Controllers\Supplier\SupplierPageController;
 use App\Http\Controllers\Catalog\CatalogPageController;
+use App\Http\Controllers\Inventory\InventoryPageController;
+use App\Http\Controllers\BrandCatalog\BrandCatalogPageController;
+use App\Http\Controllers\PaymentMethod\PaymentMethodPageController;
 
 Route::get('/', function () {
     $products = Product::latest()->take(6)->get();
@@ -38,4 +41,7 @@ Route::get('products/export', [ProductPageController::class, 'exportExcel'])->na
 Route::resource('products', ProductPageController::class)->middleware(['auth', 'verified']);
 Route::resource('suppliers', SupplierPageController::class)->middleware(['auth', 'verified']);
 Route::resource('catalogs', CatalogPageController::class)->middleware(['auth', 'verified']);
+Route::resource('inventories', InventoryPageController::class)->middleware(['auth', 'verified']);
+Route::resource('brand_catalogs', BrandCatalogPageController::class)->middleware(['auth', 'verified']);
+Route::resource('payment_methods', PaymentMethodPageController::class)->middleware(['auth', 'verified']);
 

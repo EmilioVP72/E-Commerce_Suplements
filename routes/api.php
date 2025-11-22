@@ -7,7 +7,12 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-require __DIR__.'\Supplier\supplier.php';
+Route::prefix('suppliers')->group(function (){
+    require __DIR__.'\Supplier\supplier.php';
+});
+
+
+
 require __DIR__.'\Product\product.php';
 require __DIR__.'\Brand\brand.php';
 require __DIR__.'\Rol\rol.php';
