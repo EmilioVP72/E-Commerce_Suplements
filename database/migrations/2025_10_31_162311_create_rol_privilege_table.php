@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rol_privilege', function (Blueprint $table) {
-            $table->foreignId('id_rol')->references('id_rol')->on('rol');
-            $table->foreignId('id_privilege')->references('id_privilege')->on('privilege');
+            $table->unsignedBigInteger('id_rol');
+            $table->unsignedBigInteger('id_privilege');
+            $table->primary(['id_rol', 'id_privilege']);
+
+            $table->foreign('id_rol')->references('id_rol')->on('rol')->onDelete('cascade');
+            $table->foreign('id_privilege')->references('id_privilege')->on('privilege')->onDelete('cascade');
             $table->timestamps();
         });
     }

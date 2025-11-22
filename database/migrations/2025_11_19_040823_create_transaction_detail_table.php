@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transaction_detail', function (Blueprint $table) {
-            $table->foreignId('id_transaction')->references('id_transaction')->on('transaction');
-            $table->foreignId('id_payment_method')->references('id_payment_method')->on('payment_method');
+            $table->unsignedBigInteger('id_transaction');
+            $table->unsignedBigInteger('id_payment_method');
+            $table->primary(['id_transaction', 'id_payment_method']);
+
+            $table->foreign('id_transaction')->references('id_transaction')->on('transaction')->onDelete('cascade');
+            $table->foreign('id_payment_method')->references('id_payment_method')->on('payment_method')->onDelete('cascade');
             $table->text('folio');
             $table->decimal('amount');
             $table->timestamps();

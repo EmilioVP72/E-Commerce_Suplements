@@ -10,6 +10,12 @@ use App\Http\Controllers\Catalog\CatalogPageController;
 use App\Http\Controllers\Inventory\InventoryPageController;
 use App\Http\Controllers\BrandCatalog\BrandCatalogPageController;
 use App\Http\Controllers\PaymentMethod\PaymentMethodPageController;
+use App\Http\Controllers\Purchase\PurchasePageController;
+use App\Http\Controllers\PurchaseDetail\PurchaseDetailPageController;
+use App\Http\Controllers\Residence\ResidencePageController;
+use App\Http\Controllers\ResidenceUser\ResidenceUserPageController;
+use App\Http\Controllers\Transaction\TransactionPageController;
+use App\Http\Controllers\TransactionDetail\TransactionDetailPageController;
 
 Route::get('/', function () {
     $products = Product::latest()->take(6)->get();
@@ -45,3 +51,12 @@ Route::resource('inventories', InventoryPageController::class)->middleware(['aut
 Route::resource('brand_catalogs', BrandCatalogPageController::class)->middleware(['auth', 'verified']);
 Route::resource('payment_methods', PaymentMethodPageController::class)->middleware(['auth', 'verified']);
 
+// NUEVAS RUTAS - COMPRAS Y TRANSACCIONES
+Route::resource('purchases', PurchasePageController::class)->middleware(['auth', 'verified']);
+Route::resource('purchase_details', PurchaseDetailPageController::class)->middleware(['auth', 'verified']);
+Route::resource('transactions', TransactionPageController::class)->middleware(['auth', 'verified']);
+Route::resource('transaction_details', TransactionDetailPageController::class)->middleware(['auth', 'verified']);
+
+// NUEVAS RUTAS - RESIDENCIAS
+Route::resource('residences', ResidencePageController::class)->middleware(['auth', 'verified']);
+Route::resource('residence_users', ResidenceUserPageController::class)->middleware(['auth', 'verified']);

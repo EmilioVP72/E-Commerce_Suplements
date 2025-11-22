@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('brand_catalog', function (Blueprint $table) {
-            $table->foreignId('id_brand')->references('id_brand')->on('brand');
-            $table->foreignId('id_catalog')->references('id_catalog')->on('catalog');
+            $table->unsignedBigInteger('id_brand');
+            $table->unsignedBigInteger('id_catalog');
+            $table->primary(['id_brand', 'id_catalog']);
+
+            $table->foreign('id_brand')->references('id_brand')->on('brand')->onDelete('cascade');
+            $table->foreign('id_catalog')->references('id_catalog')->on('catalog')->onDelete('cascade');
             $table->timestamps();
         });
     }

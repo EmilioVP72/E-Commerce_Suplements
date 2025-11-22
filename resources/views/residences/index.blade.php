@@ -1,0 +1,59 @@
+@extends('administration')
+
+@section('content')
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="m-0">Gestión de Residencias</h1>
+        <a href="{{ route('residences.create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i>Crear Residencia
+        </a>
+    </div>
+
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col">Ciudad</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">País</th>
+                            <th scope="col" class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($residences as $residence)
+                            <tr>
+                                <th scope="row">{{ $residence->id_residence }}</th>
+                                <td>{{ $residence->address }}</td>
+                                <td>{{ $residence->city }}</td>
+                                <td>{{ $residence->state }}</td>
+                                <td>{{ $residence->country }}</td>
+                                <td class="text-end">
+                                    <a href="{{ route('residences.edit', $residence->id_residence) }}" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <form action="{{ route('residences.destroy', $residence->id_residence) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que quieres eliminar esta residencia?')"><i class="bi bi-trash-fill"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

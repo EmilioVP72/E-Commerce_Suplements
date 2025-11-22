@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_rol', function (Blueprint $table) {
-            $table->foreignId('id_user')->references('id_user')->on('users');
-            $table->foreignId('id_rol')->references('id_rol')->on('rol');
+            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_rol');
+            $table->primary(['id_user', 'id_rol']);
+
+
+            $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
+            $table->foreign('id_rol')->references('id_rol')->on('rol')->onDelete('cascade');
             $table->timestamps();
         });
     }

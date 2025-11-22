@@ -52,4 +52,14 @@ class User extends Authenticatable
         return $this->photo ? Storage::url($this->photo) : 'https://www.gravatar.com/avatar/'.md5(strtolower(trim($this->email)));
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'id_user');
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class, 'id_user');
+    }
+
 }
