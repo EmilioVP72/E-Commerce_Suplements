@@ -2,7 +2,8 @@
 <x-app-layout>
     <div class="min-h-screen bg-gray-50 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Breadcrumb -->
+            
+        <!-- Breadcrumb -->
             <div class="mb-6 flex items-center text-sm text-gray-600">
                 <a href="/" class="hover:text-blue-600 transition">Inicio</a>
                 <svg class="mx-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
@@ -17,11 +18,12 @@
 
             <!-- Main Product Section -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white rounded-lg shadow-sm p-8 mb-8">
+                
                 <!-- Product Image -->
                 <div class="flex flex-col items-center">
                     <div class="w-full max-w-md bg-gray-100 rounded-lg overflow-hidden mb-6 aspect-square flex items-center justify-center">
                         @if($product->photo && $product->photo !== 'default.png')
-                            <img src="{{ asset('images/products/' . $product->photo) }}" alt="{{ $product->product }}" class="w-full h-full object-cover">
+                            <img src="{{ asset('storage/' . $product->photo) }}" alt="{{ $product->product }}" class="w-full h-full object-cover">
                         @else
                             <div class="text-center text-gray-400">
                                 <svg class="mx-auto h-24 w-24 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
@@ -31,12 +33,19 @@
                             </div>
                         @endif
                     </div>
-                </div>
 
+                    {{-- ADVERTENCIA DEBAJO DE LA IMAGEN --}}
+                    @if($product->warning)
+                        <div class="mb-6 w-full max-w-md p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                            <h3 class="text-sm font-semibold text-yellow-800 mb-2">⚠️ Advertencia Importante</h3>
+                            <p class="text-sm text-yellow-700">{{ $product->warning }}</p>
+                        </div>
+                    @endif
+                </div>
+                
                 <!-- Product Details -->
                 <div class="flex flex-col justify-between">
-                    <!-- Title and Brand -->
-                    <div class="mb-6">
+                    <div class="mb-2">
                         <div class="flex items-center gap-2 mb-2">
                             @if($product->brand)
                                 <span class="inline-block px-3 py-1 text-sm font-semibold text-blue-600 bg-blue-50 rounded-full">
@@ -44,33 +53,14 @@
                                 </span>
                             @endif
                         </div>
-                        <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ $product->product }}</h1>
-                        
-                        <!-- Rating Section -->
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="flex items-center">
-                                @for($i = 0; $i < 5; $i++)
-                                    <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                @endfor
-                            </div>
-                            <span class="text-sm text-gray-600">(248 valoraciones)</span>
-                        </div>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-0">{{ $product->product }}</h1> 
                     </div>
 
-                    <!-- Price Section -->
-                    <div class="mb-6 border-b-2 pb-6">
+                    <div class="mb-4 border-b-2 pb-6">
                         <div class="flex items-baseline gap-4 mb-2">
-                            <span class="text-4xl font-bold text-red-600">${{ number_format($product->sale_price, 2, ',', '.') }}</span>
-                            @if($product->purchase_price < $product->sale_price)
-                                <span class="text-lg text-gray-500 line-through">${{ number_format($product->purchase_price * 1.2, 2, ',', '.') }}</span>
-                                <span class="px-3 py-1 bg-red-100 text-red-600 text-sm font-semibold rounded-lg">
-                                    -{{ round((1 - ($product->purchase_price / $product->sale_price)) * 100) }}%
-                                </span>
-                            @endif
+                            <span class="text-4xl font-bold text-green-600">${{ number_format($product->sale_price, 2, ',', '.') }}</span>
                         </div>
-                        <p class="text-sm text-green-600 font-semibold">✓ Envío GRATIS a nivel nacional</p>
+                        <p class="text-sm text-blue-600 font-semibold">✓ Envío GRATIS a nivel nacional</p>
                     </div>
 
                     <!-- Description -->
@@ -86,29 +76,6 @@
                             <p class="text-sm text-gray-700">{{ $product->how_to_use }}</p>
                         </div>
                     @endif
-
-                    <!-- Warning -->
-                    @if($product->warning)
-                        <div class="mb-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                            <h3 class="text-sm font-semibold text-yellow-800 mb-2">⚠️ Advertencia Importante</h3>
-                            <p class="text-sm text-yellow-700">{{ $product->warning }}</p>
-                        </div>
-                    @endif
-
-                    <!-- Action Buttons -->
-                    <div class="flex gap-4">
-                        <button onclick="addToCart({{ $product->id_product }})" class="flex-1 px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-black font-bold rounded-lg transition duration-200 flex items-center justify-center gap-2">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                            Agregar al Carrito
-                        </button>
-                        <button onclick="addToWishlist({{ $product->id_product }})" class="px-6 py-3 border-2 border-gray-300 hover:border-red-500 text-gray-900 font-bold rounded-lg transition duration-200 flex items-center justify-center gap-2">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-                    </div>
                 </div>
             </div>
 
@@ -171,16 +138,4 @@
             @endif
         </div>
     </div>
-
-    <script>
-        function addToCart(productId) {
-            alert('Producto agregado al carrito: ' + productId);
-            // Aquí irá la lógica para agregar al carrito
-        }
-
-        function addToWishlist(productId) {
-            alert('Producto agregado a favoritos: ' + productId);
-            // Aquí irá la lógica para agregar a favoritos
-        }
-    </script>
 </x-app-layout>

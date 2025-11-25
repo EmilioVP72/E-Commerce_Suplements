@@ -159,7 +159,7 @@
             @foreach ($products as $product)
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="{{ $product->photo ?? 'https://placehold.co/600x400' }}" class="card-img-top" alt="{{ $product->product }}">
+                    <img src="{{ asset('storage/' . $product->photo) }}" class="card-img-top" alt="{{ $product->product }}">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $product->product }}</h5>
                         <p class="card-text">{{ Str::limit($product->description, 100) }}</p>
