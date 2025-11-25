@@ -20,7 +20,9 @@ use App\Http\Controllers\TransactionDetail\TransactionDetailPageController;
 Route::get('/', function () {
     $products = Product::latest()->take(6)->get();
     return view('welcome', ['products' => $products]);
-});
+})->name('home');
+
+Route::get('/product/{id}', [ProductPageController::class, 'show'])->name('product.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -126,24 +126,18 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="https://placehold.co/1920x500/212529/FFF?text=Promocion+1" class="d-block w-100" alt="...">
+                <img src="{{ asset('images/banner1 (1).jpg') }}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5>Las mejores proteinas</h5>
-                    <p>Alcanza tus metas con nuestra selección premium.</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://placehold.co/1920x500/343a40/FFF?text=Promocion+2" class="d-block w-100" alt="...">
+                <img src="{{ asset('images/banner2.jpg') }}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5>Energía que no se acaba</h5>
-                    <p>Descubre nuestros pre-entrenos y lleva tu rutina al siguiente nivel.</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://placehold.co/1920x500/495057/FFF?text=Promocion+3" class="d-block w-100" alt="...">
+                <img src="{{ asset('images/banner3.jpg') }}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5>Recuperación y Bienestar</h5>
-                    <p>Vitaminas y minerales para un cuerpo sano.</p>
                 </div>
             </div>
         </div>
@@ -161,7 +155,6 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Nuestros Productos</h2>
         <div class="row">
-            {{-- Suponiendo que pasas una variable $products a la vista --}}
             @if(isset($products) && !$products->isEmpty())
             @foreach ($products as $product)
             <div class="col-md-4 mb-4">
@@ -171,7 +164,7 @@
                         <h5 class="card-title">{{ $product->product }}</h5>
                         <p class="card-text">{{ Str::limit($product->description, 100) }}</p>
                         <h6 class="card-subtitle mb-2 text-muted">${{ number_format($product->sale_price, 2) }}</h6>
-                        <a href="#" class="btn btn-custom mt-auto">Ver Producto</a>
+                        <a href="{{ route('product.show', $product->id_product) }}" class="btn btn-custom mt-auto">Ver Producto</a>
                     </div>
                 </div>
             </div>
