@@ -98,6 +98,16 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Teléfono</label>
+                        <input id="phone" class="form-control @error('phone') is-invalid @enderror"
+                            type="text" name="phone" value="{{ old('phone') }}" required>
+
+                        @error('phone')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <!-- Password -->
                     <div class="mb-3">
                         <label for="password" class="form-label">Contraseña</label>

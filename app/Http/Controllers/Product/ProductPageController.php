@@ -35,6 +35,17 @@ class ProductPageController extends Controller
         return view('products.update_form', ['id' => $product->id_product]);
     }
 
+    public function show($id)
+    {
+        $product = Product::with(['brand', 'transactionDetails', 'purchaseDetails'])->findOrFail($id);
+        $relatedProducts = Product::where('id_brand', $product->id_brand)
+            ->where('id_product', '!=', $id)
+            ->limit(4)
+            ->get();
+        
+        return view('products.show', compact('product', 'relatedProducts'));
+    }
+
     public function print()
     {
         $products = Product::with(['brand.supplier'])->get();
