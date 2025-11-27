@@ -15,7 +15,7 @@ class Residence_User extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'id');
     }
 
     public function residence()

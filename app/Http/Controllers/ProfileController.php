@@ -22,29 +22,26 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
-
-        if ($request->boolean('_profile_photo_removal') && $user->profile_photo_path) {
-            Storage::disk('public')->delete($user->profile_photo_path);
-
-            $user->profile_photo_path = null;
+        if ($request->boolean('_profile_photo_removal') && $user->photo) {
+            Storage::disk('public')->delete($user->photo);
+            $user->photo = null;
         }
 
         if ($request->hasFile('photo')) {
-            if ($user->profile_photo_path) {
-                Storage::disk('public')->delete($user->profile_photo_path);
+            if ($user->photo) {
+                Storage::disk('public')->delete($user->photo);
             }
 
             $path = $request->file('photo')->store('profile-photos', 'public');
-            
-            $user->profile_photo_path = $path;
+            $user->photo = $path;
         }
 
-        $validatedData = $request->validated();
-        $dataToUpdate = collect($validatedData)->except('email')->toArray();
-
-        $user->fill($dataToUpdate);
-
+        $user->name = $request->input('name');
+        $user->lastname1 = $request->input('lastname1');
+        $user->lastname2 = $request->input('lastname2'); 
         $user->save();
+
+        Auth::setUser($user->fresh());
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -57,8 +54,8 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        if ($user->profile_photo_path) {
-            Storage::disk('public')->delete($user->profile_photo_path);
+        if ($user->photo) {
+            Storage::disk('public')->delete($user->photo);
         }
 
         Auth::logout();

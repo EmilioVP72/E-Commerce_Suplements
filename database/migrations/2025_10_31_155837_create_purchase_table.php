@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id_purchase');
             $table->timestamp('sail_date');
             
-            $table->foreignId('id_user')->references('id_user')->on('users');
+            $table->foreignId('id_user')->references('id')->on('users');
             $table->timestamps();
         });
     }
