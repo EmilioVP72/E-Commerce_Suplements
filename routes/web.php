@@ -17,6 +17,11 @@ use App\Http\Controllers\ResidenceUser\ResidenceUserPageController;
 use App\Http\Controllers\Transaction\TransactionPageController;
 use App\Http\Controllers\TransactionDetail\TransactionDetailPageController;
 use App\Http\Controllers\ShoppingCart\ShoppingCartController;
+use App\Http\Controllers\Rol\RolPageController;
+use App\Http\Controllers\Privilege\PrivilegePageController;
+use App\Http\Controllers\RolPrivilege\RolPrivilegePageController;
+use App\Http\Controllers\UserRol\UserRolPageController;
+use App\Http\Controllers\User\UserPageController;
 
 Route::get('/', function () {
     $products = Product::latest()->take(6)->get();
@@ -67,3 +72,8 @@ Route::resource('transactions', TransactionPageController::class)->middleware(['
 Route::resource('transaction_details', TransactionDetailPageController::class)->middleware(['auth', 'verified']);
 Route::resource('residences', ResidencePageController::class)->middleware(['auth', 'verified']);
 Route::resource('residence_users', ResidenceUserPageController::class)->middleware(['auth', 'verified']);
+Route::resource('roles', RolPageController::class)->middleware(['auth', 'verified']);
+Route::resource('privileges', PrivilegePageController::class)->middleware(['auth', 'verified']);
+Route::resource('rol_privileges', RolPrivilegePageController::class)->middleware(['auth', 'verified']);
+Route::resource('user_roles', UserRolPageController::class)->middleware(['auth', 'verified']);
+Route::resource('users', UserPageController::class)->middleware(['auth', 'verified']);

@@ -236,13 +236,28 @@
                 </span>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                     <i class="bi bi-people me-2"></i>Usuarios
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('roles.index') }}" class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                     <i class="bi bi-shield-check me-2"></i>Roles
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('privileges.index') }}" class="nav-link {{ request()->routeIs('privileges.*') ? 'active' : '' }}">
+                    <i class="bi bi-key me-2"></i>Privilegios
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('user_roles.index') }}" class="nav-link {{ request()->routeIs('user_roles.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-badge me-2"></i>Usuarios-Roles
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('rol_privileges.index') }}" class="nav-link {{ request()->routeIs('rol_privileges.*') ? 'active' : '' }}">
+                    <i class="bi bi-lock me-2"></i>Roles-Privilegios
                 </a>
             </li>
 

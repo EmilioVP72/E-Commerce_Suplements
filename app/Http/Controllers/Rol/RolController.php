@@ -24,35 +24,56 @@ class RolController extends Controller
         return $this->utilResponse->succesResponse(RolResource::collection($this->rolRepository->all()), 'Roles obtenidos correctamente');
     }
 
-    public function show($id)
+    public function oneRol($id)
     {
-        $rol = $this->rolRepository->find($id);
-        if ($rol) {
+        try {
+            $rol = $this->rolRepository->find($id);
+            if (!$rol) {
+                return $this->utilResponse->errorResponse('Rol no encontrado', 404);
+            }
             return $this->utilResponse->succesResponse(new RolResource($rol), 'Rol encontrado');
+        } catch (\Exception $e) {
+            return $this->utilResponse->errorResponse('Error al obtener el rol: ' . $e->getMessage(), 500);
         }
-        return $this->utilResponse->errorResponse('No existe el rol');
     }
 
-    public function store(RolRequest $request)
+    public function updateRol($id, RolRequest $request)
     {
-        $rol = $this->rolRepository->create($request->validated());
-        if ($rol) {
-            return $this->utilResponse->succesResponse(new RolResource($rol), 'Rol creado correctamente', 201);
+        try {
+            $rol = $this->rolRepository->update($id, $request->validated());
+
+            if (!$rol) {
+                return $this->utilResponse->errorResponse('Rol no encontrado', 404);
+            }
+
+            return $this->utilResponse->succesResponse(new RolResource($rol), 'Rol actualizado con éxito');
+        } catch (\Exception $e) {
+            return $this->utilResponse->errorResponse('Error al actualizar el rol: ' . $e->getMessage(), 500);
         }
-        return $this->utilResponse->errorResponse('Error al crear el rol');
     }
 
-    public function update(RolRequest $request, $id)
+    public function storeRol(RolRequest $request)
     {
-        $rol = $this->rolRepository->update($id, $request->validated());
-        return $this->utilResponse->succesResponse(new RolResource($rol), 'Rol actualizado correctamente');
+        try {
+            $rol = $this->rolRepository->create($request->validated());
+            return $this->utilResponse->succesResponse(new RolResource($rol), 'Rol creado con éxito', 201);
+        } catch (\Exception $e) {
+            return $this->utilResponse->errorResponse('Error al crear el rol: ' . $e->getMessage(), 500);
+        }
     }
 
-    public function destroy($id)
+    public function deleteRol($id)
     {
-        if ($this->rolRepository->delete($id)) {
-            return $this->utilResponse->succesResponse(null, 'Rol eliminado correctamente');
+        try {
+            $result = $this->rolRepository->delete($id);
+
+            if (!$result) {
+                return $this->utilResponse->errorResponse('Rol no encontrado', 404);
+            }
+
+            return $this->utilResponse->succesResponse(null, 'Rol eliminado con éxito');
+        } catch (\Exception $e) {
+            return $this->utilResponse->errorResponse('Error al eliminar el rol: ' . $e->getMessage(), 500);
         }
-        return $this->utilResponse->errorResponse('No se pudo eliminar el rol o no existe');
     }
 }
