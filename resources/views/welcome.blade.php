@@ -4,15 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>SupleMex - Tu tienda de suplementos</title>
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -229,7 +224,6 @@
             font-size: 0.95rem;
         }
 
-        /* Footer */
         .footer {
             background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1a1a 100%);
             color: white;
@@ -320,7 +314,6 @@
 </head>
 
 <body class="antialiased">
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: linear-gradient(135deg, #004E89 0%, #003d6b 100%);">
         <div class="container-fluid px-md-4">
             <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="{{ route('home') }}">
@@ -349,10 +342,17 @@
                 </ul>
 
                 <div class="d-flex align-items-center gap-3">
-                    <a href="#carrito" class="text-white position-relative text-decoration-none">
-                        <i class="bi bi-bag fs-5"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">0</span>
-                    </a>
+                    @auth
+                        <a href="{{ route('cart.index') }}" class="text-white position-relative text-decoration-none" id="cart-icon-auth">
+                            <i class="bi bi-bag fs-5"></i>
+                            <span class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">0</span>
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="text-white position-relative text-decoration-none">
+                            <i class="bi bi-bag fs-5"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">0</span>
+                        </a>
+                    @endauth
 
                     @auth
                         <div class="dropdown">
@@ -398,7 +398,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero-section" id="inicio">
         <div class="container">
             <h1>Potencia tu Rendimiento</h1>
@@ -489,7 +488,6 @@
         </div>
     </div>
 
-    <!-- Benefits Section -->
     <section class="benefits-section" id="beneficios">
         <div class="container">
             <div class="text-center mb-5">
@@ -536,7 +534,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer" id="contacto">
         <div class="container">
             <div class="row mb-4">
@@ -573,13 +570,44 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 SUPLEMENTS. Todos los derechos reservados.</p>
+                <p>&copy; 2025 SUPLEMEX. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+    @auth
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+
+        function updateCartCount() {
+            fetch('{{ route("cart.data") }}')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const countElement = document.querySelector('.cart-count');
+                    if (countElement) {
+                        countElement.textContent = data.count;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching cart count:', error);
+                    const countElement = document.querySelector('.cart-count');
+                    if (countElement) {
+                        countElement.textContent = 0;
+                    }
+                });
+            }
+    @endauth
+</script>
 </body>
 
+</html>
+</body>
 </html>

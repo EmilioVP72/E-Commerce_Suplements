@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -46,5 +47,10 @@ class Product extends Model
     public function purchaseDetails()
     {
         return $this->hasMany(Purchase_Detail::class, 'id_product');
+    }
+
+    public function inventory(): HasOne
+    {
+        return $this->hasOne(Inventory::class, 'id_product', 'id_product');
     }
 }

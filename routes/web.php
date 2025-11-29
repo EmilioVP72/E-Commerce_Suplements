@@ -16,6 +16,7 @@ use App\Http\Controllers\Residence\ResidencePageController;
 use App\Http\Controllers\ResidenceUser\ResidenceUserPageController;
 use App\Http\Controllers\Transaction\TransactionPageController;
 use App\Http\Controllers\TransactionDetail\TransactionDetailPageController;
+use App\Http\Controllers\ShoppingCart\ShoppingCartController;
 
 Route::get('/', function () {
     $products = Product::latest()->take(6)->get();
@@ -33,10 +34,18 @@ Route::get('/administration', function () {
 })->middleware(['auth', 'verified', 'role:Administrador'])->name('administration');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/cart', [ShoppingCartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [ShoppingCartController::class, 'add'])->name('cart.add');
+    Route::put('/cart/{cartId}', [ShoppingCartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cartId}', [ShoppingCartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/cart', [ShoppingCartController::class, 'clear'])->name('cart.clear');
+    Route::get('/cart-data', [ShoppingCartController::class, 'getCartData'])->name('cart.data');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';
 
