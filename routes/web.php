@@ -16,6 +16,12 @@ use App\Http\Controllers\Residence\ResidencePageController;
 use App\Http\Controllers\ResidenceUser\ResidenceUserPageController;
 use App\Http\Controllers\Transaction\TransactionPageController;
 use App\Http\Controllers\TransactionDetail\TransactionDetailPageController;
+use App\Http\Controllers\ShoppingCart\ShoppingCartController;
+use App\Http\Controllers\Rol\RolPageController;
+use App\Http\Controllers\Privilege\PrivilegePageController;
+use App\Http\Controllers\RolPrivilege\RolPrivilegePageController;
+use App\Http\Controllers\UserRol\UserRolPageController;
+use App\Http\Controllers\User\UserPageController;
 
 Route::get('/', function () {
     $products = Product::latest()->take(6)->get();
@@ -33,10 +39,18 @@ Route::get('/administration', function () {
 })->middleware(['auth', 'verified', 'role:Administrador'])->name('administration');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/cart', [ShoppingCartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [ShoppingCartController::class, 'add'])->name('cart.add');
+    Route::put('/cart/{cartId}', [ShoppingCartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cartId}', [ShoppingCartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/cart', [ShoppingCartController::class, 'clear'])->name('cart.clear');
+    Route::get('/cart-data', [ShoppingCartController::class, 'getCartData'])->name('cart.data');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';
 
@@ -58,3 +72,8 @@ Route::resource('transactions', TransactionPageController::class)->middleware(['
 Route::resource('transaction_details', TransactionDetailPageController::class)->middleware(['auth', 'verified']);
 Route::resource('residences', ResidencePageController::class)->middleware(['auth', 'verified']);
 Route::resource('residence_users', ResidenceUserPageController::class)->middleware(['auth', 'verified']);
+Route::resource('roles', RolPageController::class)->middleware(['auth', 'verified']);
+Route::resource('privileges', PrivilegePageController::class)->middleware(['auth', 'verified']);
+Route::resource('rol_privileges', RolPrivilegePageController::class)->middleware(['auth', 'verified']);
+Route::resource('user_roles', UserRolPageController::class)->middleware(['auth', 'verified']);
+Route::resource('users', UserPageController::class)->middleware(['auth', 'verified']);

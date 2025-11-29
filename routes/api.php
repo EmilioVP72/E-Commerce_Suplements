@@ -75,3 +75,6 @@ Route::prefix('brandcatalogs')->group( function (){
     require __DIR__.'\BrandCatalog\brand_catalog.php';
 });
 
+Route::prefix('users')->group( function (){
+    require __DIR__.'\User\user.php';
+});

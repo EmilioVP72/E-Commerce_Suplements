@@ -1,160 +1,129 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: linear-gradient(135deg, #004E89 0%, #003d6b 100%);">
+    <div class="container-fluid px-md-4">
+
+        <!-- LOGO -->
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="{{ route('home') }}">
+            <i class="bi bi-capsule text-warning"></i>
+            <span class="d-none d-sm-inline">SUPLEMEX</span>
+        </a>
+
+        <!-- TOGGLER -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- MENU -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <!-- LINKS CENTRALES -->
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url('/') }}#inicio">
+                        <i class="bi bi-house me-2"></i>Inicio
                     </a>
-                </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/') }}#productos">
+                        <i class="bi bi-basket me-2"></i>Productos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/') }}#beneficios">
+                        <i class="bi bi-star me-2"></i>Beneficios
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/') }}#contacto">
+                        <i class="bi bi-envelope me-2"></i>Contacto
+                    </a>
+                </li>
+            </ul>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <!-- Enlace a Inicio (Siempre visible) -->
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                        {{ __('Inicio') }}
-                    </x-nav-link>
+            <!-- ICONO CARRITO + LOGIN/USER -->
+            <div class="d-flex align-items-center gap-3">
 
-                    <!-- Dashboard (Solo si está autenticado) -->
-                    @auth
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                    @endauth
-
-                    <!-- Administración (Solo si tiene rol de Administrador) -->
-                    @auth
-                        @if(Auth::user()->hasRole('Administrador'))
-                            <x-nav-link :href="route('administration')" :active="request()->routeIs('administration')">
-                                {{ __('Administración') }}
-                            </x-nav-link>
-                        @endif
-                    @endauth
-                </div>
-            </div>
-
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+                {{-- ICONO CARRITO --}}
                 @auth
-                    <!-- Usuario Autenticado -->
-                    <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                                <div>{{ Auth::user()->name }}</div>
-
-                                <div class="ms-1">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                            </button>
-                        </x-slot>
-
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Perfil') }}
-                            </x-dropdown-link>
-
-                            <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-
-                                <x-dropdown-link :href="route('logout')"
-                                        onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
-                                    {{ __('Cerrar Sesión') }}
-                                </x-dropdown-link>
-                            </form>
-                        </x-slot>
-                    </x-dropdown>
+                    <a href="{{ route('cart.index') }}" class="text-white position-relative text-decoration-none">
+                        <i class="bi bi-bag fs-5"></i>
+                        <span class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="font-size: 0.65rem;">0</span>
+                    </a>
                 @else
-                    <!-- Usuario No Autenticado -->
-                    <div class="flex items-center gap-3">
-                        <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition">
-                            {{ __('Iniciar Sesión') }}
-                        </a>
-                        <a href="{{ route('register') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-                            {{ __('Registrarse') }}
-                        </a>
+                    <a href="{{ route('login') }}" class="text-white position-relative text-decoration-none">
+                        <i class="bi bi-bag fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="font-size: 0.65rem;">0</span>
+                    </a>
+                @endauth
+
+                {{-- DROPDOWN DE USUARIO --}}
+                @auth
+                    <div class="dropdown">
+
+                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle d-flex align-items-center gap-2"
+                            type="button" data-bs-toggle="dropdown">
+
+                            <div style="width: 32px; height: 32px; border-radius: 50%;
+                                background: linear-gradient(135deg, #FF6B35, #F77F00);
+                                display: flex; align-items: center; justify-content: center;
+                                color: white; font-weight: 600;">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </div>
+
+                            <span class="d-none d-md-inline text-white small">{{ Auth::user()->name }}</span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end"
+                            style="border-radius: 0.75rem; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+
+                            <li><h6 class="dropdown-header fw-bold">{{ Auth::user()->name }}</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                <i class="bi bi-person me-2"></i>Editar Perfil</a>
+                            </li>
+
+                            <li><a class="dropdown-item" href="#pedidos">
+                                <i class="bi bi-box-seam me-2"></i>Mis Pedidos</a>
+                            </li>
+
+                            @if(Auth::user()->hasRole('Administrador'))
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-warning fw-bold" href="{{ route('administration') }}">
+                                        <i class="bi bi-gear me-2"></i>Panel Administrativo
+                                    </a>
+                                </li>
+                            @endif
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" class="m-0">
+                                    @csrf
+                                    <button class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+
+                        </ul>
                     </div>
+
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                    </a>
+
+                    <a href="{{ route('register') }}" class="btn btn-warning btn-sm text-dark fw-bold">
+                        <i class="bi bi-person-plus me-2"></i>Registrarse
+                    </a>
                 @endauth
             </div>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
         </div>
-    </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <!-- Enlace a Inicio (Siempre visible) -->
-            <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                {{ __('Inicio') }}
-            </x-responsive-nav-link>
-
-            <!-- Dashboard (Solo si está autenticado) -->
-            @auth
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
-            @endauth
-
-            <!-- Administración (Solo si tiene rol de Administrador) -->
-            @auth
-                @if(Auth::user()->hasRole('Administrador'))
-                    <x-responsive-nav-link :href="route('administration')" :active="request()->routeIs('administration')">
-                        {{ __('Administración') }}
-                    </x-responsive-nav-link>
-                @endif
-            @endauth
-        </div>
-
-        <!-- Responsive Settings Options -->
-        @auth
-            <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                </div>
-
-                <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.edit')">
-                        {{ __('Perfil') }}
-                    </x-responsive-nav-link>
-
-                    <!-- Authentication -->
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-
-                        <x-responsive-nav-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                            this.closest('form').submit();">
-                            {{ __('Cerrar Sesión') }}
-                        </x-responsive-nav-link>
-                    </form>
-                </div>
-            </div>
-        @else
-            <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-                <div class="px-4 space-y-2">
-                    <a href="{{ route('login') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900 transition">
-                        {{ __('Iniciar Sesión') }}
-                    </a>
-                    <a href="{{ route('register') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition">
-                        {{ __('Registrarse') }}
-                    </a>
-                </div>
-            </div>
-        @endauth
     </div>
 </nav>

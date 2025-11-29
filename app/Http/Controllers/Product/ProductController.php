@@ -36,17 +36,35 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        $product = $this->productRepository->create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('products', 'public');
+        }
+
+        $product = $this->productRepository->create($data);
+
         if ($product) {
-            return $this->utilResponse->succesResponse(new ProductResource($product), 'Producto creado correctamente', 201);
+            return $this->utilResponse->succesResponse(new ProductResource($product), 'Producto creado correctamente'
+            );
         }
         return $this->utilResponse->errorResponse('Error al crear el producto');
     }
 
     public function update(ProductRequest $request, $id)
     {
-        $product = $this->productRepository->update($id, $request->validated());
-        return $this->utilResponse->succesResponse(new ProductResource($product), 'Producto actualizado correctamente');
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('products', 'public');
+        }
+
+        $product = $this->productRepository->update($id, $data);
+
+        return $this->utilResponse->succesResponse(
+            new ProductResource($product),
+            'Producto actualizado correctamente'
+        );
     }
 
     public function destroy($id)

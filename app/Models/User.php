@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $primaryKey = 'id_user';
+    protected $primaryKey = 'id';
     protected $table = 'users';
     public $incrementing = true;
 
@@ -62,6 +62,11 @@ class User extends Authenticatable
     public function purchases()
     {
         return $this->hasMany(Purchase::class, 'id_user');
+    }
+
+    public function shoppingCart()
+    {
+        return $this->hasMany(ShoppingCart::class, 'id_user');
     }
 
 }

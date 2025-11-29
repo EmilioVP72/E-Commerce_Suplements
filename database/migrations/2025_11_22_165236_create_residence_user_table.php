@@ -17,7 +17,7 @@ return new class extends Migration
             $table->primary(['id_residence', 'id_user']);
 
             $table->foreign('id_residence')->references('id_residence')->on('residence')->onDelete('cascade');
-            $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

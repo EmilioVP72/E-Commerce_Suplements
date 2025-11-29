@@ -1,31 +1,38 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+    <div class="form-header">
+        <h2><i class="bi bi-envelope-check me-2"></i>Verificar Correo Electrónico</h2>
+        <p>Confirma tu dirección de correo para continuar</p>
+    </div>
+
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <i class="bi bi-info-circle me-2"></i>
+        <strong>¡Gracias por registrarte!</strong> Hemos enviado un enlace de verificación a tu correo electrónico. Por favor, verifica tu dirección de correo antes de continuar.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
     @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            <strong>Enlace enviado correctamente</strong> Se ha enviado un nuevo enlace de verificación a tu correo electrónico.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
+    <div class="mt-4">
+        <p class="text-muted mb-3"><i class="bi bi-exclamation-circle me-2"></i>¿No recibiste el email?</p>
+
+        <form method="POST" action="{{ route('verification.send') }}" class="mb-3">
             @csrf
-
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
-            </div>
-        </form>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <button type="submit" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                {{ __('Log Out') }}
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-send"></i>Enviar nuevo enlace de verificación
             </button>
         </form>
     </div>
+
+    <form method="POST" action="{{ route('logout') }}" class="mt-4">
+        @csrf
+        <button type="submit" class="btn btn-secondary w-100">
+            <i class="bi bi-box-arrow-right"></i>Cerrar Sesión
+        </button>
+    </form>
 </x-guest-layout>

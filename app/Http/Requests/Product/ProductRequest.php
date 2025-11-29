@@ -19,7 +19,7 @@ class ProductRequest extends FormRequest
             case 'POST':
                 return [
                     'product' => 'required|string|max:255|unique:product,product',
-                    'photo' => 'nullable|string',
+                    'photo' => 'image|mimes:jpeg,png|max:2048',
                     'sale_price' => 'required|numeric|min:0',
                     'purchase_price' => 'required|numeric|min:0',
                     'description' => 'nullable|string',
@@ -31,7 +31,7 @@ class ProductRequest extends FormRequest
             case 'PUT':
                 return [
                     'product' => 'sometimes|required|string|max:255|unique:product,product,' . $productId . ',id_product',
-                    'photo' => 'nullable|string',
+                    'photo' => 'nullable|image|mimes:jpeg,png|max:2048',
                     'sale_price' => 'sometimes|required|numeric|min:0',
                     'purchase_price' => 'sometimes|required|numeric|min:0',
                     'description' => 'nullable|string',
@@ -53,7 +53,8 @@ class ProductRequest extends FormRequest
             'product.max' => 'El nombre del producto no debe superar los 255 caracteres.',
             'product.unique' => 'El nombre del producto ya está registrado.',
 
-            'photo.string' => 'La foto debe ser una cadena de texto válida.',
+            'photo.mimes' => 'El archivo no es una imagen válida.',
+            'photo.max' => 'El archivo es demasiado grande.',
 
             'sale_price.required' => 'El precio de venta es obligatorio.',
             'sale_price.numeric' => 'El precio de venta debe ser un número.',
