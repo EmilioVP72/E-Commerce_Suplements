@@ -45,6 +45,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/cart/{cartId}', [ShoppingCartController::class, 'remove'])->name('cart.remove');
     Route::delete('/cart', [ShoppingCartController::class, 'clear'])->name('cart.clear');
     Route::get('/cart-data', [ShoppingCartController::class, 'getCartData'])->name('cart.data');
+    Route::post('/cart/finalize', [ShoppingCartController::class, 'finalizePurchase'])->name('cart.finalize');
+    Route::get('/payment/success', [ShoppingCartController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment/pending', [ShoppingCartController::class, 'payment.pending'])->name('payment.pending');
+    Route::get('/payment/failure', [ShoppingCartController::class, 'payment.failure'])->name('payment.failure');
+    Route::post('/payment/notification', [ShoppingCartController::class, 'paymentNotification'])->name('payment.notification');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -77,3 +82,25 @@ Route::resource('privileges', PrivilegePageController::class)->middleware(['auth
 Route::resource('rol_privileges', RolPrivilegePageController::class)->middleware(['auth', 'verified']);
 Route::resource('user_roles', UserRolPageController::class)->middleware(['auth', 'verified']);
 Route::resource('users', UserPageController::class)->middleware(['auth', 'verified']);
+
+Route::get('/mp-test', function () {
+    \MercadoPago\MercadoPagoConfig::setAccessToken(config('mercadopago.access_token'));
+
+    $pref = new \MercadoPago\Client\Preference\PreferenceClient();
+
+    try {
+        $res = $pref->create([
+            "items" => [
+                [
+                    "title" => "Test item",
+                    "quantity" => 1,
+                    "unit_price" => 100
+                ]
+            ]
+        ]);
+        dd($res);
+    } catch (\Exception $e) {
+        dd($e->getMessage(), $e);
+    }
+});
+

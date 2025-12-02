@@ -183,7 +183,14 @@
                             <strong class="fs-5">${{ number_format($total, 2) }}</strong>
                         </div>
 
-                        <button class="btn btn-green w-100 mb-2">Pagar ahora</button>
+                        <form action="{{ route('cart.finalize') }}" method="POST">
+                            @csrf
+                            <button class="btn btn-primary btn-lg w-100 mt-4">
+                                <i class="bi bi-credit-card"></i> Pagar Ahora
+                            </button>
+                        </form>
+                        
+                        <br>
 
                         <button class="btn btn-secondary w-100 mb-2 clear-cart-btn">
                             Vaciar carrito

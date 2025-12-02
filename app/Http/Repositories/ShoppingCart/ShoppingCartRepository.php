@@ -5,6 +5,7 @@ namespace App\Http\Repositories\ShoppingCart;
 use App\Models\ShoppingCart;
 use App\Models\Product;
 use App\Models\Inventory;
+use Illuminate\Support\Facades\DB;
 
 class ShoppingCartRepository
 {
@@ -78,4 +79,50 @@ class ShoppingCartRepository
             return $item->product->sale_price * $item->quantity;
         });
     }
+
+    public function registerPurchaseFromPayment($payment)
+    {
+        $userId = $payment['metadata']['user_id'];
+
+        $transactionId = DB::table('transaction')->insertGetId([
+            'data' => json_encode($payment),
+            'qr_code' => json_encode($payment['point_of_interaction'] ?? []),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        $folio = 'F-' . strtoupper(uniqid());
+
+        $purchaseId = DB::table('purchase')->insertGetId([
+            'sail_date' => now(),
+            'id_user' => $userId,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        $items = $this->getCartByUserId($userId);
+
+        foreach ($items as $item) {
+            DB::table('purchase_detail')->insert([
+                'id_purchase' => $purchaseId,
+                'id_product' => $item->id_product,
+                'amount' => $item->quantity,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            DB::table('transaction_detail')->insert([
+                'id_transaction' => $transactionId,
+                'id_payment_method' => 1, // 1 = Mercado Pago
+                'id_product' => $item->id_product,
+                'folio' => $folio,
+                'amount' => $item->quantity * $item->product->sale_price,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+
+        return $purchaseId;
+    }
+
 }
