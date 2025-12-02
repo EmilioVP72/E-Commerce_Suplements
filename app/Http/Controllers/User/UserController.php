@@ -20,6 +20,11 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
+    public function index()
+    {
+        return $this->utilResponse->succesResponse(UserResource::collection($this->userRepository->getAll()),'Proveedores obtenidos correctamente');
+    }
+
     public function storeUser(StoreUserRequest $request)
     {
         try {

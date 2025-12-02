@@ -23,22 +23,24 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         if ($request->boolean('_profile_photo_removal') && $user->photo) {
-            Storage::disk('public')->delete($user->photo);
+            if (str_starts_with($user->photo, 'profile-photos/')) {
+                Storage::disk('public')->delete($user->photo);
+            }
             $user->photo = null;
         }
-
         if ($request->hasFile('photo')) {
-            if ($user->photo) {
+
+            // Borrar SOLO si la foto anterior pertenece al storage
+            if ($user->photo && str_starts_with($user->photo, 'profile-photos/')) {
                 Storage::disk('public')->delete($user->photo);
             }
 
             $path = $request->file('photo')->store('profile-photos', 'public');
             $user->photo = $path;
         }
-
         $user->name = $request->input('name');
         $user->lastname1 = $request->input('lastname1');
-        $user->lastname2 = $request->input('lastname2'); 
+        $user->lastname2 = $request->input('lastname2');
         $user->save();
 
         Auth::setUser($user->fresh());

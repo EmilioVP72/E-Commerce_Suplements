@@ -15,11 +15,11 @@ class Residence_User extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
     public function residence()
     {
-        return $this->belongsTo(Residence::class, 'id_residence');
+        return $this->belongsTo(Residence::class, 'id_residence', 'id_residence');
     }
 }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('residence', function (Blueprint $table) {
             $table->increments('id_residence');
-            $table->string('zip code', 100);
-            $table->string('municipality', 150);
+            $table->string('zip_code', 100);
+            $table->string('state', 150);
             $table->string('city', 250);
             $table->string('address', 500);
             $table->string('extra_directions', 500)->nullable();

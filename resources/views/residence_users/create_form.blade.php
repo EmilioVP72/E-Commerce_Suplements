@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const userSelect = document.getElementById('id_user');
             usersResult.data.forEach(user => {
                 const option = document.createElement('option');
-                option.value = user.id_user;
+                option.value = user.id;
                 option.textContent = user.name;
                 userSelect.appendChild(option);
             });
