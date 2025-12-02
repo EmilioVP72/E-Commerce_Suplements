@@ -42,17 +42,22 @@ class BrandCatalogController extends Controller
         return $this->utilResponse->errorResponse('Error al crear la marca de catálogo');
     }
 
-    public function update(BrandCatalogRequest $request, $id)
+    public function update(BrandCatalogRequest $request, $id_brand, $id_catalog)
     {
-        $brandCatalog = $this->brandCatalogRepository->update($id, $request->validated());
-        return $this->utilResponse->succesResponse(new BrandCatalogResource($brandCatalog), 'Marca de catálogo actualizada correctamente');
+        $brandCatalog = $this->brandCatalogRepository->update($id_brand, $id_catalog, $request->validated());
+        if ($brandCatalog) {
+            return $this->utilResponse->succesResponse(new BrandCatalogResource($brandCatalog), 'Relación actualizada correctamente');
+        }
+        return $this->utilResponse->errorResponse('No se pudo actualizar la relación');
     }
 
-    public function destroy($id)
+
+    public function destroy($id_brand, $id_catalog)
     {
-        if ($this->brandCatalogRepository->delete($id)) {
+        if ($this->brandCatalogRepository->delete($id_brand, $id_catalog)) {
             return $this->utilResponse->succesResponse(null, 'Marca de catálogo eliminada correctamente');
         }
         return $this->utilResponse->errorResponse('No se pudo eliminar la marca de catálogo o no existe');
     }
+
 }

@@ -9,7 +9,7 @@ class ResidenceUserPageController extends Controller
 {
     public function index()
     {
-        $residenceUsers = Residence_User::with(['users', 'residence'])->get();
+        $residenceUsers = Residence_User::with(['user', 'residence'])->get();
         return view('residence_users.index', compact('residenceUsers'));
     }
 

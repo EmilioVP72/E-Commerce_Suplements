@@ -15,8 +15,13 @@
                     <input type="text" class="form-control" id="brand" name="brand" required>
                 </div>
                 <div class="mb-3">
-                    <label for="description" class="form-label">Descripción</label>
-                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    <label for="id_supplier" class="form-label">Proveedor</label>
+                    <select class="form-control" id="id_supplier" name="id_supplier" required>
+                        <option value="">Selecciona un proveedor</option>
+                        @foreach($suppliers as $supplier)
+                            <option value="{{ $supplier->id_supplier }}">{{ $supplier->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="d-flex justify-content-end">
@@ -40,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (response.ok) {
             const brand = result.data;
             document.getElementById('brand').value = brand.brand || '';
-            document.getElementById('description').value = brand.description || '';
+            document.getElementById('id_supplier').value = brand.id_supplier || '';
         } else {
             alert(result.message || 'No se pudieron cargar los datos de la marca.');
         }

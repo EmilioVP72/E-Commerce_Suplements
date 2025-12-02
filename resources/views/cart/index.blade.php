@@ -1,181 +1,260 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Mi Carrito') }}
-        </h2>
-    </x-slot>
+<!DOCTYPE html>
+<html lang="es">
 
-    <div class="py-12">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            @if($items->count() > 0)
-                <div class="grid grid-cols-3 gap-6">
-                    <!-- Cart Items -->
-                    <div class="col-span-2 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
-                            <h3 class="text-lg font-semibold mb-4">Productos en tu carrito</h3>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Mi Carrito - SupleMex</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* =================== ESTILOS SUPELMEX (ADMIN STYLE) =================== */
+        :root {
+            --primary-color: #FF6B35;
+            --secondary-color: #004E89;
+            --accent-color: #F77F00;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: linear-gradient(135deg, var(--secondary-color), #003d6b);
+            box-shadow: 0 4px 12px rgba(0, 78, 137, 0.15);
+            padding: 0.75rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #FF6B35, #F77F00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* CARD GENERAL */
+        .custom-card {
+            border: none;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all .3s ease;
+        }
+
+        .custom-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+        }
+
+        /* TITULOS */
+        h3, h4 {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* BOTONES */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-danger {
+            background-color: #d9534f;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #c9302c;
+        }
+
+        .btn-green {
+            background-color: #28a745;
+            color: white;
+            font-weight: 600;
+        }
+
+        .btn-green:hover {
+            background-color: #218838;
+        }
+
+        .quantity-input {
+            width: 70px;
+        }
+
+        /* PRODUCT ITEM */
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 1rem;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-capsule me-2"></i>SUPLEMEX
+            </a>
+            <a href="{{ route('home') }}" class="text-white fw-semibold">
+                <i class="bi bi-arrow-left me-2"></i>Volver a la tienda
+            </a>
+        </div>
+    </nav>
+
+    <main class="container" style="padding-top: 100px;">
+
+        @if($items->count() > 0)
+
+            <div class="row g-4">
+
+                <div class="col-lg-8">
+                    <div class="custom-card p-4">
+                        <h3 class="mb-4">Productos en tu carrito</h3>
+
+                        @foreach($items as $item)
+                        <div class="cart-item d-flex align-items-center justify-content-between" data-cart-id="{{ $item->id_cart }}">
                             
-                            <div class="space-y-4">
-                                @foreach($items as $item)
-                                    <div class="flex items-center gap-4 border-b pb-4" data-cart-id="{{ $item->id_cart }}">
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold">{{ $item->product->product }}</h4>
-                                            <p class="text-sm text-gray-500">
-                                                Precio: ${{ number_format($item->product->sale_price, 2) }}
-                                            </p>
-                                        </div>
-                                        
-                                        <div class="flex items-center gap-2">
-                                            <input 
-                                                type="number" 
-                                                value="{{ $item->quantity }}"
-                                                min="1"
-                                                max="{{ $item->product->stock }}"
-                                                class="quantity-input w-16 px-2 py-1 border rounded"
-                                                data-cart-id="{{ $item->id_cart }}"
-                                            >
-                                        </div>
-                                        
-                                        <div class="w-24 text-right">
-                                            <p class="font-semibold">${{ number_format($item->subtotal, 2) }}</p>
-                                        </div>
-                                        
-                                        <button 
-                                            type="button"
-                                            class="remove-btn px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
-                                            data-cart-id="{{ $item->id_cart }}"
-                                        >
-                                            Eliminar
-                                        </button>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Summary -->
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg h-fit">
-                        <div class="p-6">
-                            <h3 class="text-lg font-semibold mb-4">Resumen de orden</h3>
-                            
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between">
-                                    <span>Subtotal:</span>
-                                    <span class="font-semibold">${{ number_format($total, 2) }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span>Impuestos (0%):</span>
-                                    <span class="font-semibold">$0.00</span>
-                                </div>
-                                <div class="flex justify-between text-lg font-bold border-t pt-3">
-                                    <span>Total:</span>
-                                    <span>${{ number_format($total, 2) }}</span>
-                                </div>
+                            <!-- INFO -->
+                            <div>
+                                <h5 class="fw-bold">{{ $item->product->product }}</h5>
+                                <p class="text-muted mb-1">
+                                    Precio: ${{ number_format($item->product->sale_price, 2) }}
+                                </p>
                             </div>
 
-                            <button 
-                                type="button"
-                                class="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-semibold"
-                            >
-                                Pagar ahora
-                            </button>
+                            <div>
+                                <input type="number"
+                                       min="1"
+                                       max="{{ $item->product->stock }}"
+                                       value="{{ $item->quantity }}"
+                                       class="quantity-input form-control"
+                                       data-cart-id="{{ $item->id_cart }}">
+                            </div>
 
-                            <button 
-                                type="button"
-                                class="w-full mt-2 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md font-semibold clear-cart-btn"
-                            >
-                                Vaciar carrito
-                            </button>
+                            <div class="text-end" style="width: 120px;">
+                                <p class="fw-semibold">${{ number_format($item->product->sale_price, 2) }}</p>
+                            </div>
 
-                            <a 
-                                href="{{ route('home') }}"
-                                class="block w-full mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold text-center"
-                            >
-                                Continuar comprando
-                            </a>
+                            <!-- ELIMINAR -->
+                            <button class="btn btn-danger btn-sm remove-btn" data-cart-id="{{ $item->id_cart }}">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
                         </div>
+                        @endforeach
+
                     </div>
                 </div>
-            @else
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-center">
-                        <p class="text-gray-500 dark:text-gray-400 mb-4">Tu carrito está vacío</p>
-                        <a 
-                            href="{{ route('home') }}"
-                            class="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold"
-                        >
+
+                <div class="col-lg-4">
+                    <div class="custom-card p-4 h-100">
+                        <h4 class="mb-3">Resumen de compra</h4>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <strong>${{ number_format($total, 2) }}</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Impuestos (0%):</span>
+                            <strong>$0.00</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-top pt-3 mb-4">
+                            <span>Total:</span>
+                            <strong class="fs-5">${{ number_format($total, 2) }}</strong>
+                        </div>
+
+                        <button class="btn btn-green w-100 mb-2">Pagar ahora</button>
+
+                        <button class="btn btn-secondary w-100 mb-2 clear-cart-btn">
+                            Vaciar carrito
+                        </button>
+
+                        <a href="{{ route('home') }}" class="btn btn-primary w-100">
                             Continuar comprando
                         </a>
                     </div>
                 </div>
-            @endif
-        </div>
-    </div>
+
+            </div>
+
+        @else
+            <div class="custom-card p-5 text-center">
+                <h4 class="mb-3">Tu carrito está vacío</h4>
+                <a href="{{ route('home') }}" class="btn btn-primary px-5 py-2">
+                    Ir a comprar
+                </a>
+            </div>
+
+        @endif
+
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.querySelectorAll('.quantity-input').forEach(input => {
             input.addEventListener('change', function() {
-                const cartId = this.dataset.cartId;
-                const quantity = this.value;
+                const id = this.dataset.cartId;
+                const qty = this.value;
 
-                fetch(`/cart/${cartId}`, {
+                fetch(`/cart/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify({ quantity: parseInt(quantity) })
+                    body: JSON.stringify({ quantity: parseInt(qty) })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.message);
-                        location.reload();
-                    }
-                });
+                .then(r => r.json())
+                .then(d => { location.reload(); });
             });
         });
 
         document.querySelectorAll('.remove-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                const cartId = this.dataset.cartId;
+                const id = this.dataset.cartId;
 
-                if (confirm('¿Deseas eliminar este producto?')) {
-                    fetch(`/cart/${cartId}`, {
+                if (confirm("¿Eliminar este producto?")) {
+                    fetch(`/cart/${id}`, {
                         method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
+                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            location.reload();
-                        } else {
-                            alert('Error: ' + data.message);
-                        }
-                    });
+                    .then(r => r.json())
+                    .then(d => { location.reload(); });
                 }
             });
         });
 
-        // Clear cart
-        document.querySelector('.clear-cart-btn').addEventListener('click', function() {
-            if (confirm('¿Deseas vaciar tu carrito?')) {
-                fetch('/cart', {
+        document.querySelector('.clear-cart-btn')?.addEventListener('click', function() {
+            if (confirm("¿Vaciar el carrito completo?")) {
+                fetch(`/cart`, {
                     method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    }
-                });
+                .then(r => r.json())
+                .then(d => { location.reload(); });
             }
         });
     </script>
-</x-app-layout>
+
+</body>
+</html>

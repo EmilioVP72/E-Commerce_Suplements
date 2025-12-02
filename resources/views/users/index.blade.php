@@ -16,6 +16,7 @@
                     <thead class="table-dark">
                         <tr>
                             <th scope="col">#</th>
+                            <th scope="col">Fotografía</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Email</th>
                             <th scope="col">Teléfono</th>
@@ -26,6 +27,23 @@
                         @foreach($users as $user)
                             <tr>
                                 <th scope="row">{{ $user->id }}</th>
+                                <td>
+                                    @if($user->photo)
+                                        @php
+                                            // Detecta si es una URL completa (de seeder) o ruta relativa (cargada por usuario)
+                                            $photoUrl = $user->photo;
+                                            
+                                            if (str_contains($photoUrl, 'http://') || str_contains($photoUrl, 'https://')) {
+                                                $photoUrl = str_replace('http://localhost/', 'http://localhost:8000/', $photoUrl);
+                                            } else {
+                                                $photoUrl = asset('storage/' . $photoUrl);
+                                            }
+                                        @endphp
+                                        <img src="{{ $photoUrl }}" alt="Foto de {{ $user->name }}" style="max-width: 50px; max-height: 50px; border-radius: 5px; object-fit: cover;">
+                                    @else
+                                        <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
+                                    @endif
+                                </td>
                                 <td>{{ $user->name }} {{ $user->lastname1 ?? '' }} {{ $user->lastname2 ?? '' }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone ?? 'N/A' }}</td>

@@ -35,9 +35,9 @@ class ResidenceUserRequest extends FormRequest
     {
         return [
             'id_user.required' => 'El usuario es obligatorio.',
-            'id_user.exists' => 'El usuario no existe.',
+            'id_user.exists' => 'El usuario seleccionado no existe.',
             'id_residence.required' => 'La residencia es obligatoria.',
-            'id_residence.exists' => 'La residencia no existe.',
+            'id_residence.exists' => 'La residencia seleccionada no existe.',
         ];
     }
 }

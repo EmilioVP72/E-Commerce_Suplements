@@ -14,22 +14,23 @@ class ResidenceRequest extends FormRequest
     public function rules()
     {
         switch ($this->method()) {
+
             case 'POST':
                 return [
-                    'address' => 'required|string|max:255',
-                    'city' => 'required|string|max:255',
-                    'state' => 'required|string|max:255',
-                    'zip_code' => 'required|string|max:10',
-                    'country' => 'required|string|max:255',
+                    'zip_code'         => 'required|string|max:100',
+                    'state'     => 'required|string|max:150',
+                    'city'             => 'required|string|max:250',
+                    'address'          => 'required|string|max:500',
+                    'extra_directions' => 'nullable|string|max:500',
                 ];
 
             case 'PUT':
                 return [
-                    'address' => 'sometimes|required|string|max:255',
-                    'city' => 'sometimes|required|string|max:255',
-                    'state' => 'sometimes|required|string|max:255',
-                    'zip_code' => 'sometimes|required|string|max:10',
-                    'country' => 'sometimes|required|string|max:255',
+                    'zip_code'         => 'sometimes|required|string|max:100',
+                    'state'     => 'sometimes|required|string|max:150',
+                    'city'             => 'sometimes|required|string|max:250',
+                    'address'          => 'sometimes|required|string|max:500',
+                    'extra_directions' => 'nullable|string|max:500',
                 ];
 
             default:
@@ -40,11 +41,10 @@ class ResidenceRequest extends FormRequest
     public function messages()
     {
         return [
-            'address.required' => 'La dirección es obligatoria.',
-            'city.required' => 'La ciudad es obligatoria.',
-            'state.required' => 'El estado es obligatorio.',
-            'zip_code.required' => 'El código postal es obligatorio.',
-            'country.required' => 'El país es obligatorio.',
+            'zip_code.required'         => 'El código postal es obligatorio.',
+            'state.required'     => 'El municipio es obligatorio.',
+            'city.required'             => 'La ciudad es obligatoria.',
+            'address.required'          => 'La dirección es obligatoria.',
         ];
     }
 }

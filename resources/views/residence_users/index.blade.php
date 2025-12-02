@@ -31,7 +31,7 @@
                     <tbody>
                         @foreach($residenceUsers as $residenceUser)
                             <tr>
-                                <th scope="row">{{ $residenceUser->id }}</th>
+                                <th scope="row">{{ $residenceUser->id_residence_user }}</th>
                                 <td>{{ $residenceUser->user->name ?? 'Usuario no disponible' }}</td>
                                 <td>{{ $residenceUser->residence->address ?? 'Residencia no disponible' }}</td>
                                 <td class="text-end">

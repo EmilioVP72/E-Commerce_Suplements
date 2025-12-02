@@ -240,7 +240,7 @@
                     <i class="bi bi-people me-2"></i>Usuarios
                 </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a href="{{ route('roles.index') }}" class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                     <i class="bi bi-shield-check me-2"></i>Roles
                 </a>
@@ -259,7 +259,7 @@
                 <a href="{{ route('rol_privileges.index') }}" class="nav-link {{ request()->routeIs('rol_privileges.*') ? 'active' : '' }}">
                     <i class="bi bi-lock me-2"></i>Roles-Privilegios
                 </a>
-            </li>
+            </li> -->
 
             <!-- Gestión de Productos -->
             <li class="nav-item mt-3">

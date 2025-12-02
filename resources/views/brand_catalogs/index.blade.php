@@ -21,16 +21,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- Asumiendo que la variable se llamará $brandCatalogs --}}
                         @foreach($brandCatalogs as $brandCatalog)
                             <tr>
                                 <td>{{ $brandCatalog->brand->brand ?? 'No disponible' }}</td>
                                 <td>{{ $brandCatalog->catalog->catalog ?? 'No disponible' }}</td>
                                 <td class="text-end">
-                                    {{-- La edición de una tabla pivote no es común, usualmente se elimina y se crea una nueva asociación --}}
-                                    {{-- Por eso, el botón de editar está comentado --}}
-                                    {{-- <a href="#" class="btn btn-warning btn-sm"><i class="bi bi-pencil-fill"></i></a> --}}
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteBrandCatalog({{ $brandCatalog->id_brand_catalog }})"><i class="bi bi-trash-fill"></i></button>
+                                    <a href="{{ url('brand_catalogs') }}/{{ $brandCatalog->id_brand }}/edit?id_catalog={{ $brandCatalog->id_catalog }}" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteBrandCatalog({{ $brandCatalog->id_brand }}, {{ $brandCatalog->id_catalog }})"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -42,12 +41,12 @@
 </div>
 
 <script>
-async function deleteBrandCatalog(id) {
+async function deleteBrandCatalog(idBrand, idCatalog) {
     if (!confirm('¿Estás seguro de que quieres eliminar esta asociación marca-catálogo?')) {
         return;
     }
 
-    const url = `{{ url('/api/brandcatalogs/DeleteBrandCatalog') }}/${id}`;
+    const url = `{{ url('/api/brandcatalogs/DeleteBrandCatalog') }}/${idBrand}/${idCatalog}`;
 
     try {
         const response = await fetch(url, {

@@ -25,7 +25,7 @@
 
     <body class="font-sans antialiased">
 
-        @include('partials.navbar')
+        
 
         <div class="min-h-screen bg-light">
             {{ $slot }}

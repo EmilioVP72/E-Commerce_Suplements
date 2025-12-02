@@ -10,11 +10,11 @@ class Residence extends Model
     protected $primaryKey = 'id_residence';
     
     protected $fillable = [
-        'address',
-        'city',
-        'state',
         'zip_code',
-        'country',
+        'state',
+        'city',
+        'address',
+        'extra_directions'
     ];
 
     public function residenceUsers()

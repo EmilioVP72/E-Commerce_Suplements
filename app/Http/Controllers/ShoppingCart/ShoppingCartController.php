@@ -7,15 +7,19 @@ use App\Http\Requests\ShoppingCart\AddToCartRequest;
 use App\Http\Requests\ShoppingCart\UpdateCartItemRequest;
 use App\Http\Resources\ShoppingCart\ShoppingCartResource;
 use App\Http\Repositories\ShoppingCart\ShoppingCartRepository;
+use App\Traits\UtilResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ShoppingCartController extends Controller
 {
-    protected $repository;
+    private $utilResponse;
+    private $repository;
 
-    public function __construct(ShoppingCartRepository $repository)
+    public function __construct(UtilResponse $utilResponse, ShoppingCartRepository $repository)
     {
+        $this->utilResponse = $utilResponse;
         $this->repository = $repository;
     }
 
@@ -41,15 +45,9 @@ class ShoppingCartController extends Controller
                 $request->quantity
             );
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Producto añadido al carrito correctamente',
-            ]);
+            return $this->utilResponse->succesResponse(null, 'Producto añadido al carrito correctamente', 201);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->utilResponse->errorResponse($e->getMessage(), 400);
         }
     }
 
@@ -63,15 +61,9 @@ class ShoppingCartController extends Controller
                 $request->quantity
             );
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Carrito actualizado correctamente',
-            ]);
+            return $this->utilResponse->succesResponse(null, 'Carrito actualizado correctamente');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->utilResponse->errorResponse($e->getMessage(), 400);
         }
     }
 
@@ -81,15 +73,9 @@ class ShoppingCartController extends Controller
             $userId = Auth::id();
             $this->repository->removeFromCart($userId, $cartId);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Producto removido del carrito',
-            ]);
+            return $this->utilResponse->succesResponse(null, 'Producto removido del carrito');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->utilResponse->errorResponse($e->getMessage(), 400);
         }
     }
 
@@ -99,15 +85,9 @@ class ShoppingCartController extends Controller
             $userId = Auth::id();
             $this->repository->clearCart($userId);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Carrito vaciado correctamente',
-            ]);
+            return $this->utilResponse->succesResponse(null, 'Carrito vaciado correctamente');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->utilResponse->errorResponse($e->getMessage(), 400);
         }
     }
 
@@ -117,10 +97,53 @@ class ShoppingCartController extends Controller
         $items = $this->repository->getCartByUserId($userId);
         $total = $this->repository->getCartTotal($userId);
 
-        return response()->json([
+        return $this->utilResponse->succesResponse([
             'items' => ShoppingCartResource::collection($items),
             'total' => $total,
             'count' => $items->count(),
-        ]);
+        ], 'Datos del carrito obtenidos correctamente');
+    }
+
+    public function finalizePurchase()
+    {
+        try {
+            $userId = Auth::id();
+            $items = $this->repository->getCartByUserId($userId);
+
+            if ($items->isEmpty()) {
+                return $this->utilResponse->errorResponse('El carrito está vacío', 400);
+            }
+
+            $mercadoPagoService = new \App\Services\MercadoPagoService();
+            $preference = $mercadoPagoService->createPreference($items->toArray(), $userId);
+
+            return redirect($preference->init_point);
+        } catch (\Exception $e) {
+            return $this->utilResponse->errorResponse($e->getMessage(), 400);
+        }
+    }
+
+    public function paymentSuccess(Request $request)
+    {
+        $paymentId = $request->query('payment_id');
+        return view('cart.success', ['payment_id' => $paymentId]);
+    }
+
+    public function paymentPending(Request $request)
+    {
+        return view('cart.pending');
+    }
+
+    public function paymentFailure(Request $request)
+    {
+        return view('cart.failure');
+    }
+
+    public function paymentNotification(Request $request)
+    {
+        // Webhook de MercadoPago
+        $data = $request->all();
+        Log::info('MercadoPago Notification: ', $data);
+        return response()->json(['status' => 'received']);
     }
 }

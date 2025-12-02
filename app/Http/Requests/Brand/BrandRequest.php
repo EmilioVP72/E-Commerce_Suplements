@@ -19,13 +19,13 @@ class BrandRequest extends FormRequest
             case 'POST':
                 return [
                     'brand' => 'required|string|max:255|unique:brand,brand',
-                    'name' => 'required|string|max:255|unique:brands,name',
+                    'id_supplier' => 'required|integer|exists:supplier,id_supplier',
                 ];
 
             case 'PUT':
                 return [
                     'brand' => 'sometimes|required|string|max:255|unique:brand,brand,' . $brandId . ',id_brand',
-                    'name' => 'sometimes|required|string|max:255|unique:brands,name,' . $brandId . ',id_brand',
+                    'id_supplier' => 'sometimes|required|integer|exists:supplier,id_supplier',
                 ];
 
             default:
@@ -40,8 +40,9 @@ class BrandRequest extends FormRequest
             'brand.string' => 'El nombre de la marca debe ser una cadena de texto.',
             'brand.max' => 'El nombre de la marca no debe superar los 255 caracteres.',
             'brand.unique' => 'El nombre de la marca ya está registrado.',
-            'name.required' => 'El nombre de la marca es obligatorio.',
-            'name.unique' => 'El nombre de la marca ya está en uso.',
+            'id_supplier.required' => 'El proveedor es obligatorio.',
+            'id_supplier.integer' => 'El proveedor debe ser un valor válido.',
+            'id_supplier.exists' => 'El proveedor seleccionado no existe.',
         ];
     }
 }
