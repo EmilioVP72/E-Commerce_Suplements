@@ -16,7 +16,7 @@
                     <thead class="table-dark">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Fotografia</th>
+                            <th scope="col">Fotografía</th>
                             <th scope="col">Proveedor</th>
                             <th scope="col">Teléfono</th>
                             <th scope="col">Email</th>
@@ -30,11 +30,17 @@
                                 <td>
                                     @if ($supplier->photo)
                                         @php
-                                            $correctUrl = str_replace('http://localhost/', 'http://localhost:8000/', $supplier->photo);
+                                            $photoUrl = $supplier->photo;
+                                        
+                                            if (str_contains($photoUrl, 'http://') || str_contains($photoUrl, 'https://')) {
+                                                $photoUrl = str_replace('http://localhost/', 'http://localhost:8000/', $photoUrl);
+                                            } else {
+                                                $photoUrl = asset('storage/' . $photoUrl);
+                                            }
                                         @endphp
-                                        <img src="{{ $correctUrl }}" alt="Foto del Proveedor" style="max-width: 50px; max-height: 50px; border-radius: 5px;">
+                                        <img src="{{ $photoUrl }}" alt="Foto de {{ $supplier->name }}" style="max-width: 50px; max-height: 50px; border-radius: 5px; object-fit: cover;">
                                     @else
-                                        No disponible
+                                        <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
                                     @endif
                                 </td>
                                 <td>{{ $supplier->name }}</td>

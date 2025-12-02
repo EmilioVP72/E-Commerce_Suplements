@@ -11,7 +11,7 @@ class Brand extends Model
 
     protected $fillable = [
         'brand',
-        'description'
+        'id_supplier'
     ];
 
     public function supplier()

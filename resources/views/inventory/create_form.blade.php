@@ -10,7 +10,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="id_product" class="form-label">Producto</label>
-                    <select class="form-control" id="id_product" name="id_product" required>
+                    <select class="form-control" id="id_product" name="id_product" style="color: black;" required>
                         <option value="">Seleccionar producto...</option>
                     </select>
                 </div>
@@ -34,7 +34,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', async function() {
-    // Cargar productos
     try {
         const productsResponse = await fetch("{{ url('/api/products/all') }}");
         const productsResult = await productsResponse.json();

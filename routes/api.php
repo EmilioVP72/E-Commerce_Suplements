@@ -78,3 +78,7 @@ Route::prefix('brandcatalogs')->group( function (){
 Route::prefix('users')->group( function (){
     require __DIR__.'\User\user.php';
 });
+
+Route::prefix('shoppingcarts')->group( function (){
+    require __DIR__.'\ShoppingCart\shoppingcart.php';
+});

@@ -9,7 +9,7 @@ class InventoryPageController extends Controller
 {
     public function index()
     {
-        $inventories = Inventory::with(['product', 'supplier'])->get();
+        $inventories = Inventory::with(['product'])->get();
         return view('inventory.index', compact('inventories'));
     }
 

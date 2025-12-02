@@ -28,16 +28,41 @@ class BrandCatalogRepository
         return $this->brandCatalog->create($data);
     }
 
-    public function update($id, array $data)
+    public function update($id_brand, $id_catalog, array $data)
     {
-        $brandCatalog = $this->find($id);
-        $brandCatalog?->update($data);
-        return $brandCatalog;
+        $exists = $this->brandCatalog
+            ->where('id_brand', $data['id_brand'])
+            ->where('id_catalog', $data['id_catalog'])
+            ->where(function ($q) use ($id_brand, $id_catalog) {
+                $q->where('id_brand', '!=', $id_brand)
+                ->orWhere('id_catalog', '!=', $id_catalog);
+            })
+            ->exists();
+
+        if ($exists) {
+            return null; 
+        }
+
+        $updated = $this->brandCatalog
+            ->where('id_brand', $id_brand)
+            ->where('id_catalog', $id_catalog)
+            ->update([
+                'id_brand' => $data['id_brand'],
+                'id_catalog' => $data['id_catalog'],
+                'updated_at' => now()
+            ]);
+
+        return $this->brandCatalog
+            ->where('id_brand', $data['id_brand'])
+            ->where('id_catalog', $data['id_catalog'])
+            ->first();
     }
 
-    public function delete($id)
+    public function delete($id_brand, $id_catalog)
     {
-        $brandCatalog = $this->find($id);
-        return $brandCatalog?->delete();
+        return $this->brandCatalog
+            ->where('id_brand', $id_brand)
+            ->where('id_catalog', $id_catalog)
+            ->delete();
     }
 }
