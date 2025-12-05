@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Traits;
 
 use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\Client\Payment\PaymentClient;
@@ -15,9 +15,15 @@ class MercadoPagoService
 
     public function __construct()
     {
-        MercadoPagoConfig::setAccessToken(config('mercadopago.access_token'));
-        MercadoPagoConfig::setRuntimeEnviroment(config('mercadopago.environment', 'sandbox'));
-        
+        $accessToken = config('mercadopago.access_token');
+
+        if (!$accessToken) {
+            Log::error("[MP] ERROR: Falta MERCADOPAGO_ACCESS_TOKEN en .env");
+            throw new \Exception("Falta MERCADOPAGO_ACCESS_TOKEN en el .env");
+        }
+
+        MercadoPagoConfig::setAccessToken($accessToken);
+
         $this->preferenceClient = new PreferenceClient();
         $this->paymentClient = new PaymentClient();
     }
@@ -28,46 +34,57 @@ class MercadoPagoService
             $body = [
                 "items" => $this->formatItems($items),
                 "payer" => [
-                    "email" => auth()->user()->email ?? "test@test.com"
+                    "email" => auth()->user()->email
                 ],
+
                 "back_urls" => [
                     "success" => route('payment.success'),
+                    "failure" => route('payment.failure'),
                     "pending" => route('payment.pending'),
-                    "failure" => route('payment.failure')
                 ],
-                "auto_return" => "approved",
-                "notification_url" => route('payment.notification'),
-                "external_reference" => "USER-{$userId}-" . time(),
+                "external_reference" => "USER-{$userId}-" . uniqid(),
+                "metadata" => [
+                    "user_id" => $userId
+                ]
             ];
 
-            $preference = $this->preferenceClient->create($body);
-            return $preference;
+            Log::info("[MP] Preferencia enviada:", $body);
+            return $this->preferenceClient->create($body);
         } catch (MPApiException $e) {
-            Log::error('MercadoPago Error creating preference: ' . $e->getMessage());
-            throw new \Exception('Error creating payment preference: ' . $e->getMessage());
+            $apiResponse = $e->getApiResponse();
+            Log::error('[MP] API EXCEPTION DEBUG', [
+                'message' => $e->getMessage(),
+                'content_raw' => $apiResponse?->getContent(),  
+            ]);
+
+            throw new \Exception('Error al crear preferencia: ' . $e->getMessage());
         }
+    }
+
+
+    private function formatItems($items)
+    {
+        return collect($items)->map(function ($item) {
+
+            $product = $item['product'];
+
+            return [
+                "title" => $product['name'] ?? $product['product'] ?? "Producto",
+                "quantity" => intval($item['quantity']),
+                "unit_price" => floatval($product['sale_price']),
+                "currency_id" => "MXN"
+            ];
+        })->toArray();
     }
 
     public function getPayment($paymentId)
     {
         try {
-            $payment = $this->paymentClient->get($paymentId);
-            return $payment;
+            return $this->paymentClient->get($paymentId);
         } catch (MPApiException $e) {
-            Log::error('MercadoPago Error getting payment: ' . $e->getMessage());
-            throw new \Exception('Error retrieving payment: ' . $e->getMessage());
+            Log::error("[MP] Error al obtener el pago: " . $e->getMessage());
+            throw new \Exception("Error al obtener el pago: " . $e->getMessage());
         }
-    }
-
-    private function formatItems(array $cartItems): array
-    {
-        return array_map(function ($item) {
-            return [
-                "title" => $item['product']['product'] ?? 'Producto',
-                "quantity" => $item['quantity'],
-                "unit_price" => (float) $item['product']['sale_price'],
-            ];
-        }, $cartItems);
     }
 
     public function calculateTotal(array $cartItems): float

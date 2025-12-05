@@ -11,6 +11,7 @@ use App\Traits\UtilResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Traits\MercadoPagoService;
 
 class ShoppingCartController extends Controller
 {
@@ -110,24 +111,42 @@ class ShoppingCartController extends Controller
             $userId = Auth::id();
             $items = $this->repository->getCartByUserId($userId);
 
+            Log::info('USER ID: ' . $userId);
+            Log::info('CART ITEMS RAW:', $items->toArray());
+
             if ($items->isEmpty()) {
                 return $this->utilResponse->errorResponse('El carrito está vacío', 400);
             }
 
-            $mercadoPagoService = new \App\Services\MercadoPagoService();
-            $preference = $mercadoPagoService->createPreference($items->toArray(), $userId);
+            $formattedItems = ShoppingCartResource::collection($items)->toArray(request());
+            $mercadoPagoService = new MercadoPagoService();
+            $preference = $mercadoPagoService->createPreference($formattedItems, $userId);
 
             return redirect($preference->init_point);
+
         } catch (\Exception $e) {
             return $this->utilResponse->errorResponse($e->getMessage(), 400);
         }
     }
 
+
     public function paymentSuccess(Request $request)
     {
         $paymentId = $request->query('payment_id');
+
+        $service = new MercadoPagoService();
+        $payment = $service->getPayment($paymentId);
+
+        if ($payment['status'] !== 'approved') {
+            return redirect()->route('cart.index')
+                ->with('error', 'El pago aún no está aprobado.');
+        }
+
+        $this->repository->registerPurchaseFromPayment($payment);
+        $this->repository->clearCart(Auth::id());
         return view('cart.success', ['payment_id' => $paymentId]);
     }
+
 
     public function paymentPending(Request $request)
     {
@@ -141,9 +160,21 @@ class ShoppingCartController extends Controller
 
     public function paymentNotification(Request $request)
     {
-        // Webhook de MercadoPago
-        $data = $request->all();
-        Log::info('MercadoPago Notification: ', $data);
-        return response()->json(['status' => 'received']);
+        Log::info('MP Notification', $request->all());
+        if (!isset($request['data']['id'])) {
+            return response()->json(['status' => 'ignored']);
+        }
+
+        $paymentId = $request['data']['id'];
+        $service = new MercadoPagoService();
+        $payment = $service->getPayment($paymentId);
+
+        if ($payment['status'] === 'approved') {
+            $this->repository->registerPurchaseFromPayment($payment);
+            $this->repository->clearCart($payment['metadata']['user_id']);
+        }
+
+        return response()->json(['status' => 'processed']);
     }
+
 }
