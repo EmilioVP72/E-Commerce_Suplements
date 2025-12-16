@@ -121,21 +121,21 @@
             <li><a class="nav-link active" href="#"><i class="bi bi-person-badge"></i> Perfil</a></li>
 
             <li><a class="nav-link" href="{{ route('logout') }}"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                   <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-            </a>
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST">@csrf</form>
             </li>
         </ul>
     </div>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
         <div class="container-fluid">
 
-            {{-- ===================== SECCIÓN: INFORMACIÓN DEL PERFIL ===================== --}}
             <div class="card mb-4">
-                <div class="card-header"><h5>Información del Perfil</h5></div>
+                <div class="card-header">
+                    <h5>Información del Perfil</h5>
+                </div>
                 <div class="card-body">
 
                     <!-- FORMULARIO PRINCIPAL -->
@@ -147,12 +147,12 @@
                         <div class="text-center mb-4">
                             <div class="position-relative d-inline-block">
                                 <img src="{{ $user->getProfilePhotoUrl() }}"
-                                     class="profile-photo"
-                                     alt="Foto de perfil">
+                                    class="profile-photo"
+                                    alt="Foto de perfil">
 
                                 <!-- Botón de subir foto -->
                                 <label class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle shadow"
-                                       style="transform: translate(25%, 25%); cursor: pointer;">
+                                    style="transform: translate(25%, 25%); cursor: pointer;">
                                     <i class="bi bi-camera-fill"></i>
                                     <input type="file" name="photo" class="d-none" onchange="this.form.submit()">
                                 </label>
@@ -162,8 +162,8 @@
                             <div class="mt-2">
                                 <label class="text-danger" style="cursor:pointer;">
                                     <input type="checkbox" name="_profile_photo_removal"
-                                           class="d-none"
-                                           onchange="this.form.submit()">
+                                        class="d-none"
+                                        onchange="this.form.submit()">
                                     <i class="bi bi-x-circle"></i> Eliminar foto
                                 </label>
                             </div>
@@ -199,24 +199,27 @@
             </div>
 
             <div class="card mb-4">
-                <div class="card-header"><h5>Actualizar Contraseña</h5></div>
+                <div class="card-header">
+                    <h5>Actualizar Contraseña</h5>
+                </div>
                 <div class="card-body">
                     @include('profile.partials.update-password-form')
                 </div>
             </div>
 
             <div class="card mb-4">
-                <div class="card-header bg-danger"><h5 class="text-white">Eliminar Cuenta</h5></div>
+                <div class="card-header bg-danger">
+                    <h5 class="text-white">Eliminar Cuenta</h5>
+                </div>
                 <div class="card-body">
                     @include('profile.partials.delete-user-form')
                 </div>
             </div>
-
         </div>
     </main>
 
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
+
 </html>

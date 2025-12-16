@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         });
         
-        // Cargar usuarios fallback
         const users = [
             { id: 1, name: 'Admin' },
             { id: 2, name: 'Usuario 1' }

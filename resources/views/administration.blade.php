@@ -240,7 +240,7 @@
                     <i class="bi bi-people me-2"></i>Usuarios
                 </a>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="{{ route('roles.index') }}" class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                     <i class="bi bi-shield-check me-2"></i>Roles
                 </a>
@@ -259,7 +259,7 @@
                 <a href="{{ route('rol_privileges.index') }}" class="nav-link {{ request()->routeIs('rol_privileges.*') ? 'active' : '' }}">
                     <i class="bi bi-lock me-2"></i>Roles-Privilegios
                 </a>
-            </li> -->
+            </li> 
 
             <!-- Gestión de Productos -->
             <li class="nav-item mt-3">
@@ -299,7 +299,7 @@
             </li>
 
             <!-- Gestión de Ventas -->
-            <li class="nav-item mt-3">
+            <!-- <li class="nav-item mt-3">
                 <span class="nav-link text-muted" style="cursor: default;">
                     <small><i class="bi bi-bag-check me-2"></i>VENTAS Y TRANSACCIONES</small>
                 </span>
@@ -323,7 +323,7 @@
                 <a href="{{ route('transaction_details.index') }}" class="nav-link {{ request()->routeIs('transaction_details.*') ? 'active' : '' }}">
                     <i class="bi bi-file-text me-2"></i>Detalles de Transacciones
                 </a>
-            </li>
+            </li> -->
 
             <!-- Gestión de Residencias -->
             <li class="nav-item mt-3">
