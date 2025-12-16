@@ -6,14 +6,12 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -21,25 +19,35 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user = $request->user();
+        if ($request->boolean('_profile_photo_removal') && $user->photo) {
+            if (str_starts_with($user->photo, 'profile-photos/')) {
+                Storage::disk('public')->delete($user->photo);
+            }
+            $user->photo = null;
         }
+        if ($request->hasFile('photo')) {
 
-        $request->user()->save();
+            // Borrar SOLO si la foto anterior pertenece al storage
+            if ($user->photo && str_starts_with($user->photo, 'profile-photos/')) {
+                Storage::disk('public')->delete($user->photo);
+            }
+
+            $path = $request->file('photo')->store('profile-photos', 'public');
+            $user->photo = $path;
+        }
+        $user->name = $request->input('name');
+        $user->lastname1 = $request->input('lastname1');
+        $user->lastname2 = $request->input('lastname2');
+        $user->save();
+
+        Auth::setUser($user->fresh());
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
@@ -47,6 +55,10 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        if ($user->photo) {
+            Storage::disk('public')->delete($user->photo);
+        }
 
         Auth::logout();
 

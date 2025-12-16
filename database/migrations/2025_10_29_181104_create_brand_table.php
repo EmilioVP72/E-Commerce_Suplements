@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('brand', function (Blueprint $table) {
             $table->increments('id_brand');
             $table->string('brand');
-            $table->unsignedInteger('id_supplier');
 
             $table->foreignId('id_supplier')->references('id_supplier')->on('supplier');
             $table->timestamps();

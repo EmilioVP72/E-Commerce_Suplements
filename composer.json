@@ -8,7 +8,12 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.10.1",
+        "mercadopago/dx-php": "^3.8",
+        "phpoffice/phpspreadsheet": "^5.2",
+        "spatie/laravel-permission": "^6.23",
+        "spipu/html2pdf": "^5.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
