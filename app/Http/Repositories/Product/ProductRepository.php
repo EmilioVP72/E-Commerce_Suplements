@@ -26,19 +26,60 @@ class ProductRepository
 
     public function create(array $data)
     {
-        return $this->product->create($data);
+        DB::beginTransaction();
+
+        try {
+            $product = $this->product->create($data);
+
+            DB::commit();
+            return $product;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     public function update($id, array $data)
     {
-        $product = $this->find($id);
-        $product?->update($data);
-        return $product;
+        DB::beginTransaction();
+
+        try {
+            $product = $this->find($id);
+
+            if (!$product) {
+                DB::rollBack();
+                return null;
+            }
+
+            $product->update($data);
+
+            DB::commit();
+            return $product;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     public function delete($id)
     {
-        $product = $this->find($id);
-        return $product?->delete();
+        DB::beginTransaction();
+
+        try {
+            $product = $this->find($id);
+
+            if (!$product) {
+                DB::rollBack();
+                return false;
+            }
+
+            $deleted = $product->delete();
+
+            DB::commit();
+            return $deleted;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }
